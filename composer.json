@@ -1,8 +1,7 @@
 {
   "name": "hanaboso/data-grid",
   "license": "proprietary",
-  "description": "Data grid",
-  "version": "1.0.0",
+  "description": "Data grid"
   "autoload": {
     "psr-4": {
       "Hanaboso\\DataGrid\\": "src/"
