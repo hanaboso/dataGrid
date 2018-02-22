@@ -1,0 +1,23 @@
+{
+  "name": "hanaboso/data-grid",
+  "license": "proprietary",
+  "description": "Data grid",
+  "version": "1.0.0",
+  "autoload": {
+    "psr-4": {
+      "Hanaboso\\DataGrid\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "doctrine/orm": "^2.5",
+    "symfony/symfony": "^3.3"
+  },
+  "require-dev": {
+  }
+}
