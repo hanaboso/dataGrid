@@ -9,7 +9,6 @@
 
 namespace Hanaboso\DataGrid;
 
-use Symfony\Component\HttpFoundation\Request;
 use Hanaboso\DataGrid\Query\QueryModifier;
 
 /**
@@ -28,9 +27,9 @@ class GridRequestDto
     private const DEFAULT_LIMIT = 10;
 
     /**
-     * @var Request
+     * @var array
      */
-    private $request;
+    private $headers;
 
     /**
      * @var int
@@ -48,13 +47,13 @@ class GridRequestDto
     private $limit = 0;
 
     /**
-     * DataGridParams constructor.
+     * GridRequestDto constructor.
      *
-     * @param Request $request
+     * @param array $headers
      */
-    public function __construct(Request $request)
+    public function __construct(array $headers)
     {
-        $this->request = $request;
+        $this->headers = $headers;
     }
 
     /**
@@ -62,8 +61,8 @@ class GridRequestDto
      */
     public function getFilter(): array
     {
-        if ($this->request->headers->has(self::FILTER)) {
-            $filter = json_decode($this->request->headers->get(self::FILTER), TRUE);
+        if (array_key_exists(self::FILTER, $this->headers)) {
+            $filter = json_decode($this->headers[self::FILTER], TRUE);
             if (isset($filter['search'])) {
                 $filter[QueryModifier::FILTER_SEARCH_KEY] = $filter['search'];
                 unset($filter['search']);
@@ -92,8 +91,8 @@ class GridRequestDto
      */
     public function getPage()
     {
-        if ($this->request->headers->has(self::PAGE)) {
-            return $this->request->headers->get(self::PAGE);
+        if (array_key_exists(self::PAGE, $this->headers)) {
+            return $this->headers[self::PAGE];
         }
 
         return NULL;
@@ -108,8 +107,8 @@ class GridRequestDto
             return $this->limit;
         }
 
-        if ($this->request->headers->has(self::LIMIT)) {
-            return (int) $this->request->headers->get(self::LIMIT);
+        if (array_key_exists(self::LIMIT, $this->headers)) {
+            return (int) $this->headers[self::LIMIT];
         }
 
         return self::DEFAULT_LIMIT;
@@ -132,8 +131,8 @@ class GridRequestDto
      */
     private function getOrderByForHeader()
     {
-        if ($this->request->headers->has(self::ORDER_BY)) {
-            return $this->request->headers->get(self::ORDER_BY);
+        if (array_key_exists(self::ORDER_BY, $this->headers)) {
+            return $this->headers[self::ORDER_BY];
         }
 
         return NULL;
@@ -144,9 +143,9 @@ class GridRequestDto
      */
     public function getOrderBy(): array
     {
-        if ($this->request->headers->has(self::ORDER_BY) && $this->request->headers->get(self::ORDER_BY)) {
+        if (array_key_exists(self::ORDER_BY, $this->headers) && $this->headers[self::ORDER_BY]) {
 
-            preg_match('/[+-]/', $this->request->headers->get(self::ORDER_BY), $orderArray);
+            preg_match('/[+-]/', $this->headers[self::ORDER_BY], $orderArray);
 
             if (reset($orderArray) == '+') {
                 $order = 'ASC';
@@ -154,7 +153,7 @@ class GridRequestDto
                 $order = 'DESC';
             }
 
-            $columnName = preg_replace('/[+-]/', '', $this->request->headers->get(self::ORDER_BY));
+            $columnName = preg_replace('/[+-]/', '', $this->headers[self::ORDER_BY]);
 
             $arr = [$columnName, $order];
 
