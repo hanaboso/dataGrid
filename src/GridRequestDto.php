@@ -19,11 +19,11 @@ use Hanaboso\DataGrid\Query\QueryModifier;
 class GridRequestDto
 {
 
-    public const  LIMIT         = 'Limit';
-    private const FILTER        = 'Filter';
-    private const PAGE          = 'Page';
-    private const TOTAL         = 'Total';
-    private const ORDER_BY      = 'OrderBy';
+    public const  LIMIT         = 'limit';
+    private const FILTER        = 'filter';
+    private const PAGE          = 'page';
+    private const TOTAL         = 'total';
+    private const ORDER_BY      = 'orderby';
     private const DEFAULT_LIMIT = 10;
 
     /**
@@ -53,7 +53,7 @@ class GridRequestDto
      */
     public function __construct(array $headers)
     {
-        $this->headers = $headers;
+        $this->headers = array_change_key_case($headers, CASE_LOWER);
     }
 
     /**
@@ -62,7 +62,7 @@ class GridRequestDto
     public function getFilter(): array
     {
         if (array_key_exists(self::FILTER, $this->headers)) {
-            $filter = json_decode($this->headers[self::FILTER], TRUE);
+            $filter = json_decode($this->getHeader(self::FILTER), TRUE);
             if (isset($filter['search'])) {
                 $filter[QueryModifier::FILTER_SEARCH_KEY] = $filter['search'];
                 unset($filter['search']);
@@ -92,7 +92,7 @@ class GridRequestDto
     public function getPage()
     {
         if (array_key_exists(self::PAGE, $this->headers)) {
-            return $this->headers[self::PAGE];
+            return $this->getHeader(self::PAGE);
         }
 
         return NULL;
@@ -108,7 +108,7 @@ class GridRequestDto
         }
 
         if (array_key_exists(self::LIMIT, $this->headers)) {
-            return (int) $this->headers[self::LIMIT];
+            return (int) $this->getHeader(self::LIMIT);
         }
 
         return self::DEFAULT_LIMIT;
@@ -132,7 +132,7 @@ class GridRequestDto
     private function getOrderByForHeader()
     {
         if (array_key_exists(self::ORDER_BY, $this->headers)) {
-            return $this->headers[self::ORDER_BY];
+            return $this->getHeader(self::ORDER_BY);
         }
 
         return NULL;
@@ -143,9 +143,9 @@ class GridRequestDto
      */
     public function getOrderBy(): array
     {
-        if (array_key_exists(self::ORDER_BY, $this->headers) && $this->headers[self::ORDER_BY]) {
+        if (array_key_exists(self::ORDER_BY, $this->headers) && $this->getHeader(self::ORDER_BY)) {
 
-            preg_match('/[+-]/', $this->headers[self::ORDER_BY], $orderArray);
+            preg_match('/[+-]/', $this->getHeader(self::ORDER_BY), $orderArray);
 
             if (reset($orderArray) == '+') {
                 $order = 'ASC';
@@ -153,7 +153,7 @@ class GridRequestDto
                 $order = 'DESC';
             }
 
-            $columnName = preg_replace('/[+-]/', '', $this->headers[self::ORDER_BY]);
+            $columnName = preg_replace('/[+-]/', '', $this->getHeader(self::ORDER_BY));
 
             $arr = [$columnName, $order];
 
@@ -203,6 +203,20 @@ class GridRequestDto
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return string
+     */
+    private function getHeader(string $key)
+    {
+        if (is_array($this->headers[$key])) {
+            return $this->headers[$key][0] ?? '';
+        } else {
+            return $this->headers[$key];
+        }
     }
 
 }
