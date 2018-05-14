@@ -16,7 +16,7 @@ use Hanaboso\DataGrid\Query\QueryModifier;
  *
  * @package Hanaboso\DataGrid
  */
-class GridRequestDto
+class GridRequestDto implements GridRequestDtoInterface
 {
 
     public const  LIMIT         = 'limit';

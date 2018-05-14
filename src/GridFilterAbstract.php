@@ -152,12 +152,12 @@ abstract class GridFilterAbstract
     }
 
     /**
-     * @param GridRequestDto $gridRequestDto
+     * @param GridRequestDtoInterface $gridRequestDto
      *
      * @return ResultData|array
      * @throws GridException
      */
-    public function getData(GridRequestDto $gridRequestDto)
+    public function getData(GridRequestDtoInterface $gridRequestDto)
     {
         if (!empty($this->searchQueryParams)) {
             $this->prepareSearchQuery();
