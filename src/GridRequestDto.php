@@ -168,7 +168,7 @@ class GridRequestDto implements GridRequestDtoInterface
      *
      * @return GridRequestDto
      */
-    public function setTotal(int $total): GridRequestDto
+    public function setTotal(int $total): GridRequestDtoInterface
     {
         $this->total = $total;
 
