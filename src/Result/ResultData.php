@@ -176,10 +176,10 @@ class ResultData
         if ($this->totalCount === NULL) {
             try {
                 $this->frozen   = TRUE;
-                $paginatedQuery = $this->createPaginatedQuery($this->query);
                 if ($this->queryObject !== NULL && $this->repository !== NULL) {
-                    $this->totalCount = (int) $this->queryObject->count($this->repository, $this, $paginatedQuery);
+                    $this->totalCount = (int) $this->queryObject->count($this->repository, $this);
                 } else {
+                    $paginatedQuery = $this->createPaginatedQuery($this->query);
                     $this->totalCount = $paginatedQuery->count();
                 }
             } catch (Exception $e) {
