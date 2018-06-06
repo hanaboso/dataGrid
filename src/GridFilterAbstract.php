@@ -113,6 +113,7 @@ abstract class GridFilterAbstract
         $this->em = $em;
         $this->setEntity();
         $this->configFilterColsCallbacks();
+        $this->configCustomCountQuery();
         $this->prepareSearchQuery();
     }
 
@@ -215,13 +216,22 @@ abstract class GridFilterAbstract
      */
 
     /**
-     * In child can configure AFilteredSource::filterColsCallbacks
+     * In child can configure GridFilterAbstract::filterColsCallbacks
      * example child content
      * $this->filterColsCallbacks[ESomeEnumCols::CREATED_AT_FROM] = [$object,'applyCreatedAtFrom']
      *
      * function applySomeFilter(QueryBuilder $qb,$filterVal,$colName){}
      */
     protected function configFilterColsCallbacks(): void
+    {
+    }
+
+    /**
+     * In child can configure GridFilterAbstract::configCustomCountQuery
+     * example child content
+     * $this->countQuery = $this->getRepository()->createQueryBuilder('c')->select('count(c.id)')
+     */
+    protected function configCustomCountQuery(): void
     {
     }
 

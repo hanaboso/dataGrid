@@ -127,7 +127,9 @@ class QueryObject
     )
     {
         if ($this->countQueryBuilder) {
-            return $this->filterQuery($this->countQueryBuilder)->getQuery()->getSingleScalarResult();
+            $result = $this->filterQuery($this->countQueryBuilder)->getQuery()->getOneOrNullResult();
+
+            return $result ?? 0;
         }
 
         if ($paginatedQuery) {
