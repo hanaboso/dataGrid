@@ -94,6 +94,11 @@ abstract class GridFilterAbstract
     protected $fetchJoin = TRUE;
 
     /**
+     * @var bool
+     */
+    protected $useOutputWalkers = FALSE;
+
+    /**
      * @var int
      */
     private $whispererLimit = 50;
@@ -263,7 +268,8 @@ abstract class GridFilterAbstract
             $this->search,
             $this->getSearchQuery(),
             $this->countQuery,
-            $this->fetchJoin
+            $this->fetchJoin,
+            $this->useOutputWalkers
         );
     }
 

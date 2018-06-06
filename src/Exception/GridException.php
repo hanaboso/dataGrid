@@ -26,5 +26,6 @@ final class GridException extends Exception
     public const GET_TOTAL_COUNT_ERROR    = 5;
     public const SEARCH_COLS_ERROR        = 6;
     public const SEARCH_QUERY_NOT_FOUND   = 7;
+    public const SORT_COLS_ERROR          = 8;
 
 }

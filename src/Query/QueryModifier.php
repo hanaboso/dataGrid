@@ -10,6 +10,7 @@
 namespace Hanaboso\DataGrid\Query;
 
 use Doctrine\ORM\QueryBuilder;
+use Hanaboso\DataGrid\Exception\GridException;
 
 /**
  * Class QueryModifier
@@ -109,9 +110,17 @@ class QueryModifier
      * @param array $cols
      *
      * @return string
+     * @throws GridException
      */
     public static function getOrderString(array $order, array $cols): string
     {
+        if (!isset($cols[$order[0]])) {
+            throw  new GridException(
+                sprintf('Column [%s] is not defined for sorting.', $order[0]),
+                GridException::SORT_COLS_ERROR
+            );
+        }
+
         return sprintf('%s %s', $cols[$order[0]], $order[1]);
     }
 

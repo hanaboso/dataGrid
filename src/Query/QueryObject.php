@@ -16,9 +16,9 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
-use Iterator;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\Result\ResultData;
+use Iterator;
 
 /**
  * Class QueryObject
@@ -79,12 +79,18 @@ class QueryObject
     private $fetchJoin;
 
     /**
+     * @var bool
+     */
+    private $useOutputWalkers;
+
+    /**
      * @param array             $filters
      * @param array             $searches
      * @param string            $searchValue
      * @param QueryBuilder      $basicQuery
      * @param QueryBuilder|null $countQuery
      * @param bool              $fetchJoin
+     * @param bool              $useOutputWalkers
      */
     public function __construct(
         array $filters,
@@ -92,7 +98,8 @@ class QueryObject
         string $searchValue,
         QueryBuilder $basicQuery,
         ?QueryBuilder $countQuery = NULL,
-        bool $fetchJoin = TRUE
+        bool $fetchJoin = TRUE,
+        bool $useOutputWalkers = FALSE
     )
     {
         $this->filters           = $filters;
@@ -101,6 +108,7 @@ class QueryObject
         $this->basicQueryBuilder = $basicQuery;
         $this->countQueryBuilder = $countQuery;
         $this->fetchJoin         = $fetchJoin;
+        $this->useOutputWalkers  = $useOutputWalkers;
     }
 
     /**
@@ -218,6 +226,7 @@ class QueryObject
         if ($this->lastQuery !== $query) {
             $this->lastResult = new ResultData($query, $this, $repository);
             $this->lastResult->setFetchJoinCollection($this->fetchJoin);
+            $this->lastResult->setUseOutputWalkers($this->useOutputWalkers);
         }
 
         return $this->lastQuery = $query;
