@@ -15,9 +15,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
-use Nette\Utils\Strings;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\Query\QueryObject;
+use Nette\Utils\Strings;
 
 /**
  * Class ResultData
@@ -175,11 +175,13 @@ class ResultData
     {
         if ($this->totalCount === NULL) {
             try {
-                $this->frozen   = TRUE;
+                $this->frozen = TRUE;
                 if ($this->queryObject !== NULL && $this->repository !== NULL) {
-                    $this->totalCount = (int) $this->queryObject->count($this->repository, $this);
+                    $count            = $this->queryObject->count($this->repository, $this);
+                    $count            = is_array($count) ? reset($count) : $count;
+                    $this->totalCount = (int) $count;
                 } else {
-                    $paginatedQuery = $this->createPaginatedQuery($this->query);
+                    $paginatedQuery   = $this->createPaginatedQuery($this->query);
                     $this->totalCount = $paginatedQuery->count();
                 }
             } catch (Exception $e) {
