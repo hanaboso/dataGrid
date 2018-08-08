@@ -10,6 +10,7 @@
 namespace Hanaboso\DataGrid;
 
 use Hanaboso\DataGrid\Query\QueryModifier;
+use Throwable;
 
 /**
  * Class GridResponseAbstract
@@ -199,7 +200,11 @@ class GridRequestDto implements GridRequestDtoInterface
     {
         foreach ($data as $key => &$item) {
             if (is_array($item)) {
-                $item = implode(',', $item);
+                try {
+                    $item = implode(',', $item);
+                } catch (Throwable $t) {
+                    $item = '';
+                }
             }
 
             if ($key === QueryModifier::FILTER_SEARCH_KEY) {
