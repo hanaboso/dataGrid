@@ -25,6 +25,7 @@ class GridRequestDto implements GridRequestDtoInterface
     private const TOTAL         = 'total';
     private const ORDER_BY      = 'orderby';
     private const DEFAULT_LIMIT = 10;
+    private const SEARCH        = 'search';
 
     /**
      * @var array
@@ -63,9 +64,9 @@ class GridRequestDto implements GridRequestDtoInterface
     {
         if (array_key_exists(self::FILTER, $this->headers)) {
             $filter = json_decode($this->getHeader(self::FILTER), TRUE);
-            if (isset($filter['search'])) {
-                $filter[QueryModifier::FILTER_SEARCH_KEY] = $filter['search'];
-                unset($filter['search']);
+            if (isset($filter[self::SEARCH])) {
+                $filter[QueryModifier::FILTER_SEARCH_KEY] = $filter[self::SEARCH];
+                unset($filter[self::SEARCH]);
             }
 
             return array_merge($filter, $this->filter);
@@ -196,9 +197,14 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     protected function formatFilterForHeader(array $data): array
     {
-        foreach ($data as &$item) {
+        foreach ($data as $key => &$item) {
             if (is_array($item)) {
                 $item = implode(',', $item);
+            }
+
+            if ($key === QueryModifier::FILTER_SEARCH_KEY) {
+                $data[self::SEARCH] = $item;
+                unset($data[$key]);
             }
         }
 
