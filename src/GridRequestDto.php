@@ -83,6 +83,7 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     public function setAdditionalFilters(array $filter): self
     {
+        $this->filter = $this->getFilter();
         $this->filter = array_merge($this->filter, $filter);
 
         return $this;
