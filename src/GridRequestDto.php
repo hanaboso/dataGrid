@@ -223,9 +223,9 @@ class GridRequestDto implements GridRequestDtoInterface
     private function getHeader(string $key): string
     {
         if (is_array($this->headers[$key])) {
-            return $this->headers[$key][0] ?? '';
+            return (string) ($this->headers[$key][0] ?? '');
         } else {
-            return $this->headers[$key];
+            return (string) $this->headers[$key];
         }
     }
 
