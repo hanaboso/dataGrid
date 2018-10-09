@@ -40,8 +40,8 @@ class QueryModifier
      */
     public static function filter(
         QueryBuilder $qb,
-        array $filters = [],
-        array $searchers = [],
+        array $filters,
+        array $searchers,
         string $searchValue
     ): QueryBuilder
     {

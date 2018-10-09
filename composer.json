@@ -13,10 +13,12 @@
     }
   },
   "require": {
-    "php": ">=7.0",
-    "doctrine/orm": "^2.5",
-    "nette/utils": "^2.4"
+    "php": "^7.1",
+    "ext-json": "*",
+    "doctrine/orm": "^2.6",
+    "nette/utils": "^2.5"
   },
   "require-dev": {
+    "hanaboso/php-check-utils": "^1.0"
   }
 }

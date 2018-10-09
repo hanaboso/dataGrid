@@ -74,7 +74,7 @@ abstract class GridFilterAbstract
     protected $searchableCols = [];
 
     /**
-     * @var QueryBuilder
+     * @var QueryBuilder|NULL
      */
     protected $searchQuery;
 
@@ -142,6 +142,7 @@ abstract class GridFilterAbstract
 
         foreach ($this->searchableCols as $name => $col) {
             $object  = $this->getFilteredQuery([$col => $name])->select($name . ' AS ' . $col);
+            /** @var iterable $results */
             $results = $this->getResultData($object);
 
             $i = 0;
@@ -170,13 +171,16 @@ abstract class GridFilterAbstract
         }
 
         $object = $this->getQuery($gridRequestDto->getFilter(), $gridRequestDto->getOrderBy());
+        /** @var ResultData $data */
         $data   = $this->getResultData($object);
 
         if (!empty($gridRequestDto->getOrderBy())) {
             $data->applySorting($this->order);
         }
 
-        $data->applyPagination((int) $gridRequestDto->getPage(), $gridRequestDto->getLimit());
+        /** @var string|null $page */
+        $page = $gridRequestDto->getPage();
+        $data->applyPagination((int) $page, $gridRequestDto->getLimit());
 
         $gridRequestDto->setTotal($data->getTotalCount());
 
@@ -292,7 +296,7 @@ abstract class GridFilterAbstract
         $search_cols = [];
         foreach ($this->searchableCols as $col) {
             if (!isset($this->orderCols[$col])) {
-                $class = get_called_class();
+                $class = static::class;
                 throw new GridException(
                     sprintf(
                         'Key %s contained %s::typeCols is not defined in %s::orderCols. Add definition %s::orderCols[\'%s\'] = "some db field"',
@@ -314,7 +318,7 @@ abstract class GridFilterAbstract
     private function getSearchQuery(): QueryBuilder
     {
         if (!$this->searchQuery) {
-            $class = get_called_class();
+            $class = static::class;
             throw new GridException(
                 sprintf('QueryBuilder is missing. Add definition %s::searchQuery = "some db field"', $class),
                 GridException::SEARCH_QUERY_NOT_FOUND
@@ -332,7 +336,10 @@ abstract class GridFilterAbstract
      */
     private function getResultData(QueryObject $object)
     {
-        return $object->fetch($this->getRepository(), AbstractQuery::HYDRATE_OBJECT);
+        /** @var EntityRepository $repository */
+        $repository = $this->getRepository();
+
+        return $object->fetch($repository, AbstractQuery::HYDRATE_OBJECT);
     }
 
 }

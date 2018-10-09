@@ -1,18 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Unit\Utils\Query;
+namespace Tests\Integration\Query;
 
 use Doctrine\ORM\QueryBuilder;
-use Tests\KernelTestCaseAbstract;
 use Hanaboso\DataGrid\Query\FilterCallbackDto;
 use Hanaboso\DataGrid\Query\QueryModifier;
+use Tests\TestCaseAbstract;
 
 /**
  * Class QueryModifierTest
  *
- * @package Tests\Unit\Utils\Query
+ * @package Tests\Integration\Query
  */
-class QueryModifierTest extends KernelTestCaseAbstract
+final class QueryModifierTest extends TestCaseAbstract
 {
 
     /**
@@ -20,7 +20,7 @@ class QueryModifierTest extends KernelTestCaseAbstract
      */
     public function testFilter(): void
     {
-        $call = new FilterCallbackDto(function ($q, $s, $col): void {
+        $call = new FilterCallbackDto(function ($q, $s): void {
             $q->addSelect($s);
         }, 'qwe', 'asd');
 
@@ -37,6 +37,8 @@ class QueryModifierTest extends KernelTestCaseAbstract
         $val    = 'val';
 
         QueryModifier::filter($qb, $filter, $search, $val)->getQuery()->getDQL();
+
+        self::assertTrue(TRUE);
     }
 
     /**

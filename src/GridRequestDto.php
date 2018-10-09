@@ -158,9 +158,7 @@ class GridRequestDto implements GridRequestDtoInterface
 
             $columnName = preg_replace('/[+-]/', '', $this->getHeader(self::ORDER_BY));
 
-            $arr = [$columnName, $order];
-
-            return $arr;
+            return [$columnName, $order];
         }
 
         return [];
@@ -222,7 +220,7 @@ class GridRequestDto implements GridRequestDtoInterface
      *
      * @return string
      */
-    private function getHeader(string $key)
+    private function getHeader(string $key): string
     {
         if (is_array($this->headers[$key])) {
             return $this->headers[$key][0] ?? '';

@@ -39,7 +39,7 @@ class QueryObject
     private $countQueryBuilder = NULL;
 
     /**
-     * @var Query
+     * @var Query|NULL
      */
     private $lastQuery;
 
@@ -167,7 +167,7 @@ class QueryObject
     /**
      * @param EntityRepository $repository
      *
-     * @return object
+     * @return mixed
      * @throws GridException
      */
     public function fetchOne(EntityRepository $repository)

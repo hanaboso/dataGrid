@@ -47,7 +47,6 @@ final class FilterCallbackDto
     }
 
     /**
-     *
      * @return callable callback
      */
     public function getCallback(): callable
@@ -56,7 +55,6 @@ final class FilterCallbackDto
     }
 
     /**
-     *
      * @return mixed
      */
     public function getValue()
@@ -65,7 +63,6 @@ final class FilterCallbackDto
     }
 
     /**
-     *
      * @return string
      */
     public function getColumnName(): string

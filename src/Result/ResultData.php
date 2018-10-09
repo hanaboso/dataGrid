@@ -161,7 +161,7 @@ class ResultData
     public function applyPagination(int $page = 1, int $itemsPerPage = 25): ResultData
     {
         $page = max(1, min($page, ceil($this->getTotalCount() / $itemsPerPage)));
-        $this->query->setFirstResult(--$page * $itemsPerPage);
+        $this->query->setFirstResult((int) (--$page * $itemsPerPage));
         $this->query->setMaxResults($itemsPerPage);
 
         return $this;
