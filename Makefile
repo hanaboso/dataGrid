@@ -37,6 +37,8 @@ composer-update:
 create-database:
 	$(DM) /bin/bash -c 'mysql -uroot -proot <<< "DROP DATABASE IF EXISTS datagrid;"'
 	$(DM) /bin/bash -c 'mysql -uroot -proot <<< "CREATE DATABASE datagrid CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"'
+	$(DE) sudo rm -rf temp/*
+	$(DE) sudo touch temp/.gitkeep
 
 codesniffer:
 	$(DE) vendor/bin/phpcs --standard=ruleset.xml --colors -p src tests
@@ -47,6 +49,6 @@ phpstan:
 phpintegration: create-database
 	$(DE) vendor/bin/phpunit -c phpunit.xml.dist --colors tests/Integration
 
-fasttest: codesniffer phpstan phpintegration
+fasttest: codesniffer phpstan create-database phpintegration
 
 test: docker-up-force composer-install fasttest
