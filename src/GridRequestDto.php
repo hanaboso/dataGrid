@@ -90,15 +90,15 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return null|string|array
+     * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         if (array_key_exists(self::PAGE, $this->headers)) {
-            return $this->getHeader(self::PAGE);
+            return intval($this->getHeader(self::PAGE));
         }
 
-        return NULL;
+        return 0;
     }
 
     /**
