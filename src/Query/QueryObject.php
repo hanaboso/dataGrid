@@ -61,6 +61,11 @@ class QueryObject
     /**
      * @var array
      */
+    private $advancedFilters;
+
+    /**
+     * @var array
+     */
     private $searches;
 
     /**
@@ -85,6 +90,7 @@ class QueryObject
 
     /**
      * @param array             $filters
+     * @param array             $advancedFilters
      * @param array             $searches
      * @param string            $searchValue
      * @param QueryBuilder      $basicQuery
@@ -94,6 +100,7 @@ class QueryObject
      */
     public function __construct(
         array $filters,
+        array $advancedFilters,
         array $searches,
         string $searchValue,
         QueryBuilder $basicQuery,
@@ -103,6 +110,7 @@ class QueryObject
     )
     {
         $this->filters           = $filters;
+        $this->advancedFilters   = $advancedFilters;
         $this->searches          = $searches;
         $this->searchValue       = $searchValue;
         $this->basicQueryBuilder = $basicQuery;
@@ -127,9 +135,7 @@ class QueryObject
     )
     {
         if ($this->countQueryBuilder) {
-            $result = $this->filterQuery($this->countQueryBuilder)->getQuery()->getOneOrNullResult();
-
-            return $result ?? 0;
+            return $this->filterQuery($this->countQueryBuilder)->getQuery()->getSingleScalarResult();
         }
 
         if ($paginatedQuery) {
@@ -241,7 +247,7 @@ class QueryObject
      */
     private function filterQuery($qb): QueryBuilder
     {
-        $qb = QueryModifier::filter($qb, $this->filters, $this->searches, $this->searchValue);
+        $qb = QueryModifier::filter($qb, $this->filters, $this->advancedFilters, $this->searches, $this->searchValue);
 
         if ($this->select) {
             $qb = $qb->select($this->select);

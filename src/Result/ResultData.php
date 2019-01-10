@@ -161,7 +161,7 @@ class ResultData
     public function applyPagination(int $page = 1, int $itemsPerPage = 25): ResultData
     {
         $page = max(1, min($page, ceil($this->getTotalCount() / $itemsPerPage)));
-        $this->query->setFirstResult((int) (--$page * $itemsPerPage));
+        $this->query->setFirstResult(intval(--$page * $itemsPerPage));
         $this->query->setMaxResults($itemsPerPage);
 
         return $this;
@@ -175,13 +175,11 @@ class ResultData
     {
         if ($this->totalCount === NULL) {
             try {
-                $this->frozen = TRUE;
+                $this->frozen   = TRUE;
+                $paginatedQuery = $this->createPaginatedQuery($this->query);
                 if ($this->queryObject !== NULL && $this->repository !== NULL) {
-                    $count            = $this->queryObject->count($this->repository, $this);
-                    $count            = is_array($count) ? reset($count) : $count;
-                    $this->totalCount = (int) $count;
+                    $this->totalCount = (int) $this->queryObject->count($this->repository, $this, $paginatedQuery);
                 } else {
-                    $paginatedQuery   = $this->createPaginatedQuery($this->query);
                     $this->totalCount = $paginatedQuery->count();
                 }
             } catch (Exception $e) {

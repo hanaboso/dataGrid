@@ -24,10 +24,11 @@ final class FilterTest extends TestCaseAbstract
 
     private const DATETIME = 'Y-m-d H:i:s';
 
-    private const ORDER  = 'orderBy';
-    private const FILTER = 'filter';
-    private const PAGE   = 'page';
-    private const LIMIT  = 'limit';
+    private const ORDER           = 'orderBy';
+    private const FILTER          = 'filter';
+    private const ADVANCED_FILTER = 'advanced_filter';
+    private const PAGE            = 'page';
+    private const LIMIT           = 'limit';
 
     /**
      * @var DateTime
@@ -1369,21 +1370,6 @@ final class FilterTest extends TestCaseAbstract
             'total'   => 0,
             'orderby' => NULL,
         ], $dto->getParamsForHeader());
-
-        $documentFilter = (new EntityFilter($this->em));
-        $this->setProperty($documentFilter, 'searchableCols', []);
-        try {
-            $documentFilter->getData(new GridRequestDto([
-                self::FILTER => '{"search": "Unknown"}',
-            ]))->toArray();
-            self::assertEquals(TRUE, FALSE);
-        } catch (GridException $e) {
-            $this->assertEquals(GridException::GET_TOTAL_COUNT_ERROR, $e->getCode());
-            $this->assertEquals(
-                '[Syntax Error] line 0, col -1: Error: Expected Literal, got end of string.',
-                $e->getMessage()
-            );
-        }
     }
 
     /**
@@ -1473,6 +1459,123 @@ final class FilterTest extends TestCaseAbstract
             'limit'   => 2,
             'total'   => 10,
         ], $dto->getParamsForHeader());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAdvancedConditions(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::ADVANCED_FILTER => json_encode([
+                [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'EQ',
+                        'value'     => 'String 1',
+                    ], [
+                        'column'    => 'int',
+                        'operation' => 'EQ',
+                        'value'     => 1,
+                    ], [
+                        'column'    => 'bool',
+                        'operation' => 'EQ',
+                        'value'     => TRUE,
+                    ],
+                ], [
+                    [
+                        'column'    => 'bool',
+                        'operation' => 'EQ',
+                        'value'     => FALSE,
+                    ],
+                ],
+            ]),
+        ]))->toArray();
+        self::assertEquals([
+            [
+                'id'     => $result[0]['id'],
+                'string' => 'String 1',
+                'int'    => 1,
+                'float'  => 1.1,
+                'bool'   => FALSE,
+                'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+            ],
+        ], $result);
+
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::ADVANCED_FILTER => json_encode([
+                [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'LIKE',
+                        'value'     => 'ri',
+                    ],
+                ], [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'STARTS',
+                        'value'     => 'St',
+                    ],
+                ], [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'ENDS',
+                        'value'     => 'ng 1',
+                    ],
+                ],
+            ]),
+        ]))->toArray();
+        self::assertEquals([
+            [
+                'id'     => $result[0]['id'],
+                'string' => 'String 1',
+                'int'    => 1,
+                'float'  => 1.1,
+                'bool'   => FALSE,
+                'date'   => $this->today->format(self::DATETIME),
+            ],
+        ], $result);
+
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::FILTER          => '{"string": "String 1"}',
+            self::ADVANCED_FILTER => json_encode([
+                [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'STARTS',
+                        'value'     => 'St',
+                    ],
+                ], [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'LIKE',
+                        'value'     => 'ri',
+                    ],
+                ], [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'ENDS',
+                        'value'     => 'ng 1',
+                    ],
+                ], [
+                    [
+                        'column'    => 'custom_string',
+                        'operation' => 'EQ',
+                        'value'     => 'String 1',
+                    ],
+                ],
+            ]),
+        ]))->toArray();
+        self::assertEquals([
+            [
+                'id'     => $result[0]['id'],
+                'string' => 'String 1',
+                'int'    => 1,
+                'float'  => 1.1,
+                'bool'   => FALSE,
+                'date'   => $this->today->format(self::DATETIME),
+            ],
+        ], $result);
     }
 
 }

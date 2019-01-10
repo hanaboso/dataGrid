@@ -49,6 +49,11 @@ abstract class GridFilterAbstract
     protected $filters;
 
     /**
+     * @var array
+     */
+    protected $advancedFilters;
+
+    /**
      * @var string
      */
     protected $order;
@@ -142,8 +147,10 @@ abstract class GridFilterAbstract
 
         foreach ($this->searchableCols as $name => $col) {
             $object  = $this->getFilteredQuery([$col => $name])->select($name . ' AS ' . $col);
-            /** @var iterable $results */
             $results = $this->getResultData($object);
+            if (!is_array($results)) {
+                $results = $results->toArray();
+            }
 
             $i = 0;
             foreach ($results as $result) {
@@ -170,17 +177,19 @@ abstract class GridFilterAbstract
             $this->prepareSearchQuery();
         }
 
-        $object = $this->getQuery($gridRequestDto->getFilter(), $gridRequestDto->getOrderBy());
+        $object = $this->getQuery(
+            $gridRequestDto->getFilter(),
+            $gridRequestDto->getAdvancedFilter(),
+            $gridRequestDto->getOrderBy()
+        );
         /** @var ResultData $data */
-        $data   = $this->getResultData($object);
+        $data = $this->getResultData($object);
 
         if (!empty($gridRequestDto->getOrderBy())) {
             $data->applySorting($this->order);
         }
 
-        /** @var string|null $page */
-        $page = $gridRequestDto->getPage();
-        $data->applyPagination((int) $page, $gridRequestDto->getLimit());
+        $data->applyPagination(intval($gridRequestDto->getPage()), $gridRequestDto->getLimit());
 
         $gridRequestDto->setTotal($data->getTotalCount());
 
@@ -241,15 +250,21 @@ abstract class GridFilterAbstract
 
     /**
      * @param array $filter
+     * @param array $advancedFilter
      * @param array $order
      *
      * @return QueryObject
      * @throws GridException
      */
-    private function getQuery(array $filter = [], array $order = []): QueryObject
+    private function getQuery(array $filter = [], array $advancedFilter = [], array $order = []): QueryObject
     {
-        $this->search  = QueryModifier::getSearch($filter);
-        $this->filters = QueryModifier::getFilters($filter, $this->filterCols, $this->filterColsCallbacks);
+        $this->search          = QueryModifier::getSearch($filter);
+        $this->filters         = QueryModifier::getFilters($filter, $this->filterCols, $this->filterColsCallbacks);
+        $this->advancedFilters = QueryModifier::getAdvancedFilters(
+            $advancedFilter,
+            $this->filterCols,
+            $this->filterColsCallbacks
+        );
 
         if (!empty($order)) {
             $this->order = QueryModifier::getOrderString($order, $this->orderCols);
@@ -278,6 +293,7 @@ abstract class GridFilterAbstract
 
         return new QueryObject(
             $this->filters,
+            $this->advancedFilters,
             $cols,
             $this->search,
             $this->getSearchQuery(),
@@ -296,7 +312,7 @@ abstract class GridFilterAbstract
         $search_cols = [];
         foreach ($this->searchableCols as $col) {
             if (!isset($this->orderCols[$col])) {
-                $class = static::class;
+                $class = self::class;
                 throw new GridException(
                     sprintf(
                         'Key %s contained %s::typeCols is not defined in %s::orderCols. Add definition %s::orderCols[\'%s\'] = "some db field"',
@@ -318,9 +334,8 @@ abstract class GridFilterAbstract
     private function getSearchQuery(): QueryBuilder
     {
         if (!$this->searchQuery) {
-            $class = static::class;
             throw new GridException(
-                sprintf('QueryBuilder is missing. Add definition %s::searchQuery = "some db field"', $class),
+                sprintf('QueryBuilder is missing. Add definition %s::searchQuery = "some db field"', self::class),
                 GridException::SEARCH_QUERY_NOT_FOUND
             );
         }

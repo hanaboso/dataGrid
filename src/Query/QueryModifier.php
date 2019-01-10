@@ -30,9 +30,23 @@ class QueryModifier
      */
     public const FILER_VAL_NOT_NULL = '_MODIFIER_VAL_NOT_NULL';
 
+    public const EQ      = 'EQ';
+    public const NEQ     = 'NEQ';
+    public const GT      = 'GT';
+    public const LT      = 'LT';
+    public const GTE     = 'GTE';
+    public const LTE     = 'LTE';
+    public const LIKE    = 'LIKE';
+    public const STARTS  = 'STARTS';
+    public const ENDS    = 'ENDS';
+    public const FL      = 'FL';
+    public const NFL     = 'NFL';
+    public const BETWEEN = 'BETWEEN';
+
     /**
      * @param QueryBuilder $qb
      * @param array        $filters
+     * @param array        $advancedFilters
      * @param array        $searchers
      * @param string       $searchValue
      *
@@ -41,6 +55,7 @@ class QueryModifier
     public static function filter(
         QueryBuilder $qb,
         array $filters,
+        array $advancedFilters,
         array $searchers,
         string $searchValue
     ): QueryBuilder
@@ -49,7 +64,17 @@ class QueryModifier
         foreach ($filters as $key => $filter) {
 
             if ($filter instanceof FilterCallbackDto) {
-                call_user_func($filter->getCallback(), $qb, $filter->getValue(), $filter->getColumnName());
+                $expr = $qb->expr()->andX();
+                call_user_func(
+                    $filter->getCallback(),
+                    $qb,
+                    $filter->getValue(),
+                    $filter->getColumnName(),
+                    $expr,
+                    NULL
+                );
+
+                $qb->andWhere($expr);
             } elseif (is_null($filter)) {
                 $qb->andWhere($key . ' IS NULL');
             } elseif ($filter === self::FILER_VAL_NOT_NULL) {
@@ -66,17 +91,62 @@ class QueryModifier
             $i++;
         }
 
-        if ($searchValue) {
-            $array = [];
-            foreach ($searchers as $s) {
-                if ($s instanceof FilterCallbackDto) {
-                    call_user_func($s->getCallback(), $qb, $searchValue, $s->getColumnName());
-                    continue;
+        $expr = $qb->expr()->andX();
+        $adds = FALSE;
+        foreach ($advancedFilters as $advancedFilter) {
+            $adds   = TRUE;
+            $orExpr = $qb->expr()->orX();
+            foreach ($advancedFilter as $innerFilter) {
+                $condition = NULL;
+                if ($innerFilter['column'] instanceof FilterCallbackDto) {
+                    call_user_func(
+                        $innerFilter['column']->getCallback(),
+                        $qb,
+                        $innerFilter['column']->getValue(),
+                        $innerFilter['column']->getColumnName(),
+                        $orExpr,
+                        $innerFilter['operation']
+                    );
+                } else {
+                    $condition = self::getCondition(
+                        $qb,
+                        $innerFilter['column'],
+                        $innerFilter['value'],
+                        $innerFilter['operation']
+                    );
                 }
-                $array[] = sprintf('%s LIKE :search', $s);
+                if ($condition) {
+                    $orExpr->add($condition);
+                }
+            }
+            $expr->add($orExpr);
+        }
+        if ($adds) {
+            $qb->andWhere($expr);
+        }
+
+        if ($searchValue) {
+            $adds = FALSE;
+            $expr = $qb->expr()->orX();
+            foreach ($searchers as $s) {
+                $adds = TRUE;
+                if ($s instanceof FilterCallbackDto) {
+                    call_user_func(
+                        $s->getCallback(),
+                        $qb,
+                        $searchValue,
+                        $s->getColumnName(),
+                        $expr,
+                        NULL
+                    );
+                } else {
+                    $expr->add(self::getCondition($qb, $s, $searchValue, self::LIKE));
+                }
             }
 
-            $qb->andWhere(implode(' OR ', $array))->setParameter('search', sprintf('%%%s%%', $searchValue));
+            if ($adds) {
+                $qb->andWhere($expr);
+            }
         }
 
         return $qb;
@@ -106,6 +176,22 @@ class QueryModifier
     }
 
     /**
+     * @param array $filter
+     * @param array $filterCols
+     * @param array $filterCallbacks
+     *
+     * @return array
+     */
+    public static function getAdvancedFilters(array $filter, array $filterCols, array $filterCallbacks): array
+    {
+        foreach ($filter as $index => $innerFilter) {
+            $filter[$index] = self::getAdvancedInnerFilter($innerFilter, $filterCols, $filterCallbacks);
+        }
+
+        return $filter;
+    }
+
+    /**
      * @param array $order
      * @param array $cols
      *
@@ -132,6 +218,103 @@ class QueryModifier
     public static function getSearch(array $filter): string
     {
         return $filter[self::FILTER_SEARCH_KEY] ?? '';
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param string       $name
+     * @param mixed        $value
+     * @param string|null  $operator
+     *
+     * @return mixed|null
+     */
+    public static function getCondition(QueryBuilder $qb, string $name, $value, ?string $operator = NULL)
+    {
+        switch ($operator) {
+            case self::EQ:
+                return $qb->expr()->eq($name, self::getValue($value));
+            case self::NEQ:
+                return $qb->expr()->neq($name, self::getValue($value));
+            case self::GT:
+                return $qb->expr()->gt($name, self::getValue($value));
+            case self::LT:
+                return $qb->expr()->lt($name, self::getValue($value));
+            case self::GTE:
+                return $qb->expr()->gte($name, self::getValue($value));
+            case self::LTE:
+                return $qb->expr()->lte($name, self::getValue($value));
+            case self::FL:
+                return $qb->expr()->isNotNull($name);
+            case self::NFL:
+                return $qb->expr()->isNull($name);
+            case self::LIKE:
+                return $qb->expr()->like($name, sprintf("'%%%s%%'", $value));
+            case self::STARTS:
+                return $qb->expr()->like($name, sprintf("'%s%%'", $value));
+            case self::ENDS:
+                return $qb->expr()->like($name, sprintf("'%%%s'", $value));
+            case self::BETWEEN:
+                if (!is_array($value) || count($value) <= 1) {
+                    return NULL;
+                }
+
+                return $qb->expr()->between($name, self::getValue($value[0]), self::getValue($value[1]));
+        }
+
+        return $qb->expr()->eq($name, self::getValue($value));
+    }
+
+    /**
+     * @param array $filter
+     * @param array $filterCols
+     * @param array $filterCallbacks
+     *
+     * @return array
+     */
+    private static function getAdvancedInnerFilter(array $filter, array $filterCols, array $filterCallbacks): array
+    {
+        foreach ($filter as $index => $item) {
+            $column = $item['column'] ?? ($item['name'] ?? '');
+
+            if (array_key_exists($column, $filterCols)
+                && array_key_exists('value', $item)
+                && array_key_exists('operation', $item)
+            ) {
+                if (isset($filterCallbacks[$column])) {
+                    $filter[$index]['column'] = new FilterCallbackDto(
+                        $filterCallbacks[$column],
+                        $item['value'],
+                        $filterCols[$column]
+                    );
+                } else {
+                    $filter[$index]['column'] = $filterCols[$column];
+                }
+            } else {
+                unset($filter[$index]);
+            }
+        }
+
+        return $filter;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    private static function getValue($value)
+    {
+        if (is_numeric($value)) {
+            return sprintf('%s', $value);
+        } elseif (is_bool($value)) {
+            return sprintf('%s', $value ? "true" : "false");
+        } elseif (is_string($value)) {
+            return sprintf('\'%s\'', $value);
+        } elseif (is_null($value)) {
+            return '\'\'';
+        }
+
+        return $value;
     }
 
 }

@@ -20,13 +20,14 @@ use Throwable;
 class GridRequestDto implements GridRequestDtoInterface
 {
 
-    public const  LIMIT         = 'limit';
-    private const FILTER        = 'filter';
-    private const PAGE          = 'page';
-    private const TOTAL         = 'total';
-    private const ORDER_BY      = 'orderby';
-    private const DEFAULT_LIMIT = 10;
-    private const SEARCH        = 'search';
+    public const  LIMIT           = 'limit';
+    private const FILTER          = 'filter';
+    private const PAGE            = 'page';
+    private const TOTAL           = 'total';
+    private const ORDER_BY        = 'orderby';
+    private const DEFAULT_LIMIT   = 10;
+    private const SEARCH          = 'search';
+    private const ADVANCED_FILTER = 'advanced_filter';
 
     /**
      * @var array
@@ -77,14 +78,25 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
+     * @return array
+     */
+    public function getAdvancedFilter(): array
+    {
+        if (array_key_exists(self::ADVANCED_FILTER, $this->headers)) {
+            return json_decode($this->getHeader(self::ADVANCED_FILTER), TRUE);
+        }
+
+        return [];
+    }
+
+    /**
      * @param array $filter
      *
      * @return GridRequestDto
      */
     public function setAdditionalFilters(array $filter): self
     {
-        $this->filter = $this->getFilter();
-        $this->filter = array_merge($this->filter, $filter);
+        $this->filter = array_merge($this->getFilter(), $filter);
 
         return $this;
     }
@@ -165,9 +177,17 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
+     * @return int
+     */
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
+
+    /**
      * @param int $total
      *
-     * @return GridRequestDto
+     * @return GridRequestDtoInterface
      */
     public function setTotal(int $total): GridRequestDtoInterface
     {

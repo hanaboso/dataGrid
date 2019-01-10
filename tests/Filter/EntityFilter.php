@@ -2,8 +2,10 @@
 
 namespace Tests\Filter;
 
+use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\QueryBuilder;
 use Hanaboso\DataGrid\GridFilterAbstract;
+use Hanaboso\DataGrid\Query\QueryModifier;
 use Tests\Entity\Entity;
 
 /**
@@ -84,8 +86,8 @@ final class EntityFilter extends GridFilterAbstract
         parent::configFilterColsCallbacks();
 
         $this->filterColsCallbacks = [
-            'custom_string' => function (QueryBuilder $builder, string $value, string $name): void {
-                $builder->where(sprintf('%s = :customString', $name))->setParameter('customString', $value);
+            'custom_string' => function (QueryBuilder $qb, $value, $name, Composite $c, ?string $operator): void {
+                $c->add(QueryModifier::getCondition($qb, $name, $value, $operator));
             },
         ];
     }
