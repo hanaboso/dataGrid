@@ -244,9 +244,17 @@ class QueryModifier
             case self::LTE:
                 return $qb->expr()->lte($name, self::getValue($value));
             case self::FL:
-                return $qb->expr()->isNotNull($name);
+                $expr = $qb->expr()->orX();
+                $expr->add($qb->expr()->isNotNull($name));
+                $expr->add($qb->expr()->neq($name, sprintf("'%s'", $value)));
+
+                return $expr;
             case self::NFL:
-                return $qb->expr()->isNull($name);
+                $expr = $qb->expr()->orX();
+                $expr->add($qb->expr()->isNull($name));
+                $expr->add($qb->expr()->eq($name, sprintf("'%s'", $value)));
+
+                return $expr;
             case self::LIKE:
                 return $qb->expr()->like($name, sprintf("'%%%s%%'", $value));
             case self::STARTS:
@@ -277,9 +285,14 @@ class QueryModifier
             $column = $item['column'] ?? ($item['name'] ?? '');
 
             if (array_key_exists($column, $filterCols)
-                && array_key_exists('value', $item)
                 && array_key_exists('operation', $item)
+                && (array_key_exists('value', $item) || in_array($item['operation'], [self::FL, self::NFL], TRUE))
             ) {
+                if (!array_key_exists('value', $item)) {
+                    $filter[$index]['value'] = '';
+                    $item['value']           = '';
+                }
+
                 if (isset($filterCallbacks[$column])) {
                     $filter[$index]['column'] = new FilterCallbackDto(
                         $filterCallbacks[$column],

@@ -1522,6 +1522,11 @@ final class FilterTest extends TestCaseAbstract
                         'operation' => 'ENDS',
                         'value'     => 'ng 1',
                     ],
+                ], [
+                    [
+                        'column'    => 'string',
+                        'operation' => 'FL',
+                    ],
                 ],
             ]),
         ]))->toArray();
@@ -1562,6 +1567,11 @@ final class FilterTest extends TestCaseAbstract
                         'column'    => 'custom_string',
                         'operation' => 'EQ',
                         'value'     => 'String 1',
+                    ],
+                ], [
+                    [
+                        'column'    => 'custom_string',
+                        'operation' => 'FL',
                     ],
                 ],
             ]),
