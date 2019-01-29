@@ -246,7 +246,7 @@ class ResultData
         }
         if ($sorting) {
             $dql = Strings::normalize($this->query->getDQL());
-            if (!preg_match('~(ORDER BY)~si', $dql, $m)) {
+            if (!preg_match('~ORDER BY(?! .+\..+ SEPARATOR)~si', $dql, $m)) {
                 $dql .= ' ORDER BY ';
             } else {
                 $dql .= ', ';
