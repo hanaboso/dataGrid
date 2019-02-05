@@ -232,9 +232,13 @@ class QueryModifier
     {
         switch ($operator) {
             case self::EQ:
-                return $qb->expr()->eq($name, self::getValue($value));
+                return is_array($value) ?
+                    $qb->expr()->in($name, self::getValue($value)) :
+                    $qb->expr()->eq($name, self::getValue($value));
             case self::NEQ:
-                return $qb->expr()->neq($name, self::getValue($value));
+                return is_array($value) ?
+                    $qb->expr()->notIn($name, self::getValue($value)) :
+                    $qb->expr()->neq($name, self::getValue($value));
             case self::GT:
                 return $qb->expr()->gt($name, self::getValue($value));
             case self::LT:
