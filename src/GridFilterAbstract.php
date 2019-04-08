@@ -146,7 +146,7 @@ abstract class GridFilterAbstract
         $arr = [];
 
         foreach ($this->searchableCols as $name => $col) {
-            $object  = $this->getFilteredQuery([$col => $name])->select($name . ' AS ' . $col);
+            $object  = $this->getFilteredQuery([$col => $name])->select(sprintf('%s AS %s', $name, $col));
             $results = $this->getResultData($object);
             if (!is_array($results)) {
                 $results = $results->toArray();
@@ -168,10 +168,10 @@ abstract class GridFilterAbstract
     /**
      * @param GridRequestDtoInterface $gridRequestDto
      *
-     * @return ResultData|array
+     * @return ResultData
      * @throws GridException
      */
-    public function getData(GridRequestDtoInterface $gridRequestDto)
+    public function getData(GridRequestDtoInterface $gridRequestDto): ResultData
     {
         if (!empty($this->searchQueryParams)) {
             $this->prepareSearchQuery();
@@ -309,7 +309,7 @@ abstract class GridFilterAbstract
      */
     private function getSearchCols(): array
     {
-        $search_cols = [];
+        $searchCols = [];
         foreach ($this->searchableCols as $col) {
             if (!isset($this->orderCols[$col])) {
                 $class = self::class;
@@ -321,10 +321,10 @@ abstract class GridFilterAbstract
                     GridException::SEARCH_COLS_ERROR
                 );
             }
-            $search_cols[$col] = $this->orderCols[$col];
+            $searchCols[$col] = $this->orderCols[$col];
         }
 
-        return $search_cols;
+        return $searchCols;
     }
 
     /**

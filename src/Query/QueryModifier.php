@@ -76,16 +76,18 @@ class QueryModifier
 
                 $qb->andWhere($expr);
             } elseif (is_null($filter)) {
-                $qb->andWhere($key . ' IS NULL');
+                $qb->andWhere(sprintf('%s IS NULL', $key));
             } elseif ($filter === self::FILER_VAL_NOT_NULL) {
-                $qb->andWhere($key . ' IS NOT NULL');
+                $qb->andWhere(sprintf('%s IS NOT NULL', $key));
             } elseif (is_array($filter)) {
                 $uniqId = uniqid();
-                $qb->andWhere($key . ' IN (:valsIN' . $uniqId . ')')->setParameter('valsIN' . $uniqId, $filter);
+                $qb
+                    ->andWhere(sprintf('%s IN (:valsIN%s)', $key, $uniqId))
+                    ->setParameter(sprintf('valsIN%s', $uniqId), $filter);
             } elseif (preg_match('/[><=]/', $key)) {
-                $qb->andWhere($key . '?' . $i)->setParameter($i, $filter);
+                $qb->andWhere(sprintf('%s?%s', $key, $i))->setParameter($i, $filter);
             } else {
-                $qb->andWhere($key . '=?' . $i)->setParameter($i, $filter);
+                $qb->andWhere(sprintf('%s=?%s', $key, $i))->setParameter($i, $filter);
             }
 
             $i++;
@@ -324,7 +326,7 @@ class QueryModifier
         if (is_numeric($value)) {
             return sprintf('%s', $value);
         } elseif (is_bool($value)) {
-            return sprintf('%s', $value ? "true" : "false");
+            return sprintf('%s', $value ? 'true' : 'false');
         } elseif (is_string($value)) {
             return sprintf('\'%s\'', $value);
         } elseif (is_null($value)) {

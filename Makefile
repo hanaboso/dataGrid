@@ -1,7 +1,7 @@
 .PHONY: init-dev
 
 IMAGE=dkr.hanaboso.net/hanaboso/datagrid/
-PHP=dkr.hanaboso.net/hanaboso/symfony3-base:php-7.2
+PHP=dkr.hanaboso.net/hanaboso/symfony3-base:php-7.3
 DC=docker-compose
 DE=docker-compose exec -T php
 DM=docker-compose exec -T mariadb

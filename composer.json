@@ -13,9 +13,9 @@
     }
   },
   "require": {
-    "php": "^7.1",
+    "php": "^7.3",
     "ext-json": "*",
-    "beberlei/DoctrineExtensions": "^1.1",
+    "beberlei/doctrineextensions": "^1.2",
     "doctrine/orm": "^2.6",
     "nette/utils": "^2.5"
   },

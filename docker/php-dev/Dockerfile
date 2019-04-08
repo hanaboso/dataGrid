@@ -1,9 +1,7 @@
-FROM dkr.hanaboso.net/hanaboso/symfony3-base:php-7.2
+FROM dkr.hanaboso.net/hanaboso/symfony3-base:php-7.3
 
 RUN apt-get update && \
     apt-get install -y sudo zip && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer global require "hirak/prestissimo:^0.3" && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     apt-get clean && apt-get autoremove -y && \

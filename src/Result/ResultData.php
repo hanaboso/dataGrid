@@ -88,8 +88,8 @@ class ResultData
     /**
      * @param bool $fetchJoinCollection
      *
-     * @throws GridException
      * @return ResultData
+     * @throws GridException
      */
     public function setFetchJoinCollection(bool $fetchJoinCollection): ResultData
     {
@@ -103,8 +103,8 @@ class ResultData
     /**
      * @param bool $useOutputWalkers
      *
-     * @throws GridException
      * @return ResultData
+     * @throws GridException
      */
     public function setUseOutputWalkers(bool $useOutputWalkers): ResultData
     {
@@ -134,8 +134,8 @@ class ResultData
     /**
      * Removes ORDER BY clause that is not inside subquery.
      *
-     * @throws GridException
      * @return ResultData
+     * @throws GridException
      */
     public function clearSorting(): ResultData
     {
@@ -225,8 +225,8 @@ class ResultData
     /**
      * @param string|array $columns
      *
-     * @throws GridException
      * @return ResultData
+     * @throws GridException
      */
     public function applySorting($columns): ResultData
     {
@@ -235,7 +235,7 @@ class ResultData
         foreach (is_array($columns) ? $columns : func_get_args() as $name => $column) {
             $newColumn = NULL;
             if (!is_numeric($name)) {
-                $newColumn = $name . ' ' . $column;
+                $newColumn = sprintf('%s %s', $name, $column);
             }
             $newColumn = trim(is_null($newColumn) ? $column : $newColumn);
             if (!preg_match('~\s+(DESC|ASC)\s*\z~i', $newColumn)
@@ -251,7 +251,7 @@ class ResultData
             } else {
                 $dql .= ', ';
             }
-            $this->query->setDQL($dql . implode(', ', $sorting));
+            $this->query->setDQL(sprintf('%s%s', $dql, implode(', ', $sorting)));
         }
         $this->iterator = NULL;
 
@@ -265,8 +265,8 @@ class ResultData
     /**
      * @param int $hydrationMode
      *
-     * @throws GridException
      * @return ArrayIterator
+     * @throws GridException
      */
     private function getIterator($hydrationMode = AbstractQuery::HYDRATE_OBJECT): ArrayIterator
     {
