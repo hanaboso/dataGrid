@@ -34,7 +34,7 @@ composer-outdated:
 
 # Console
 clear-cache:
-	$(DE) sudo rm -rf var/cache
+	$(DE) sudo rm -rf temp
 
 # App dev
 init-dev: docker-up-force composer-install

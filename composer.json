@@ -16,8 +16,7 @@
     "php": "^7.3",
     "ext-json": "*",
     "beberlei/doctrineextensions": "^1.2",
-    "doctrine/orm": "^2.6",
-    "nette/utils": "^2.5"
+    "doctrine/orm": "^2.6"
   },
   "require-dev": {
     "hanaboso/php-check-utils": "^1.0"

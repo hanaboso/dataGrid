@@ -10,7 +10,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\Query\QueryObject;
-use Nette\Utils\Strings;
 
 /**
  * Class ResultData
@@ -133,7 +132,7 @@ class ResultData
     public function clearSorting(): ResultData
     {
         $this->updating();
-        $dql = Strings::normalize($this->query->getDQL());
+        $dql = $this->query->getDQL();
 
         // Removes everything from last 'ORDER BY' to end of a string
         if (preg_match('~^(.+)\\s+(ORDER BY\\s+((?!FROM|WHERE|ORDER\\s+BY|GROUP\\sBY|JOIN).)*)\\z~si', $dql, $m)) {
@@ -238,7 +237,7 @@ class ResultData
             $sorting[] = $newColumn;
         }
         if ($sorting) {
-            $dql = Strings::normalize($this->query->getDQL());
+            $dql = $this->query->getDQL();
             if (!preg_match('~ORDER BY(?! .+\..+ SEPARATOR)~si', $dql, $m)) {
                 $dql .= ' ORDER BY ';
             } else {
