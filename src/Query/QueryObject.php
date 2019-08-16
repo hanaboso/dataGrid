@@ -1,12 +1,5 @@
 <?php declare(strict_types=1);
 
-/**
- * Created by PhpStorm.
- * User: radekj
- * Date: 20.9.17
- * Time: 14:40
- */
-
 namespace Hanaboso\DataGrid\Query;
 
 use Doctrine\ORM\AbstractQuery;
@@ -222,8 +215,8 @@ class QueryObject
     /**
      * @param EntityRepository $repository
      *
-     * @throws GridException
      * @return Query
+     * @throws GridException
      */
     private function getQuery(EntityRepository $repository): Query
     {

@@ -1,9 +1,8 @@
-FROM dkr.hanaboso.net/hanaboso/symfony3-base:php-7.3
+FROM dkr.hanaboso.net/hanaboso/php-base:php-7.3
 
 RUN apt-get update && \
     apt-get install -y sudo zip && \
     pecl install xdebug && \
-    docker-php-ext-enable xdebug && \
     apt-get clean && apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/lib/log/* /var/log/* /tmp/* /var/tmp/*
 

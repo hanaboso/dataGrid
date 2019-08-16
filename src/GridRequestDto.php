@@ -1,12 +1,5 @@
 <?php declare(strict_types=1);
 
-/**
- * Created by PhpStorm.
- * User: radekj
- * Date: 20.9.17
- * Time: 16:43
- */
-
 namespace Hanaboso\DataGrid;
 
 use Hanaboso\DataGrid\Query\QueryModifier;

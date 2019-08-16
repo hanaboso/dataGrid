@@ -1,12 +1,5 @@
 <?php declare(strict_types=1);
 
-/**
- * Created by PhpStorm.
- * User: radekj
- * Date: 20.9.17
- * Time: 13:57
- */
-
 namespace Hanaboso\DataGrid\Result;
 
 use ArrayIterator;

@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManager;
@@ -37,8 +36,6 @@ abstract class TestCaseAbstract extends TestCase
      */
     protected function setUp(): void
     {
-        AnnotationRegistry::registerLoader('class_exists');
-
         $reader = new AnnotationReader();
         $driver = new MappingDriverChain();
         $driver->addDriver(new AnnotationDriver($reader, [sprintf('%s/Entity', __DIR__)]), 'Tests\\Entity');
