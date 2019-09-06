@@ -23,7 +23,7 @@ abstract class TestCaseAbstract extends TestCase
 {
 
     private const TEMP_DIR = '%s/../temp/Doctrine2.ORM';
-    private const HOSTNAME = 'datagrid_mariadb_1';
+    private const HOSTNAME = 'mariadb';
     private const DATABASE = 'datagrid';
 
     /**
