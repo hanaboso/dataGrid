@@ -1,7 +1,5 @@
 .PHONY: init-dev
 
-IMAGE=dkr.hanaboso.net/hanaboso/datagrid/
-PHP=dkr.hanaboso.net/hanaboso/php-base:php-7.3
 DC=docker-compose
 DE=docker-compose exec -T php
 DM=docker-compose exec -T mariadb
@@ -18,9 +16,6 @@ docker-up-force: .env
 
 docker-down-clean: .env
 	$(DC) down -v
-
-dev-build: .env
-	cd docker/php-dev && docker pull ${PHP} && docker build -t ${IMAGE}app:dev . && docker push ${IMAGE}app:dev
 
 # Composer
 composer-install:
