@@ -20,5 +20,6 @@ final class GridException extends Exception
     public const SEARCH_COLS_ERROR        = 6;
     public const SEARCH_QUERY_NOT_FOUND   = 7;
     public const SORT_COLS_ERROR          = 8;
+    public const FILTER_COLS_ERROR        = 9;
 
 }

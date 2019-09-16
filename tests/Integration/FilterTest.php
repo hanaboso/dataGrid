@@ -24,11 +24,13 @@ final class FilterTest extends TestCaseAbstract
 
     private const DATETIME = 'Y-m-d H:i:s';
 
-    private const ORDER           = 'orderBy';
-    private const FILTER          = 'filter';
-    private const ADVANCED_FILTER = 'advanced_filter';
-    private const PAGE            = 'page';
-    private const LIMIT           = 'limit';
+    private const SORTER         = 'sorter';
+    private const FILTER         = 'filter';
+    private const PAGE           = 'page';
+    private const SEARCH         = 'search';
+    private const ITEMS_PER_PAGE = 'itemsPerPage';
+
+    protected const PAGING = 'paging';
 
     /**
      * @var DateTime
@@ -63,7 +65,7 @@ final class FilterTest extends TestCaseAbstract
      */
     public function testBasic(): void
     {
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([]))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -144,7 +146,14 @@ final class FilterTest extends TestCaseAbstract
      */
     public function testSortations(): void
     {
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+id']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'id',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -219,7 +228,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-id']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'id',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -294,7 +310,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+string']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'string',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -369,7 +392,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-string']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'string',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -444,7 +474,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+int']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'int',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -519,7 +556,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-int']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'int',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -594,7 +638,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+float']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'float',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -669,7 +720,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-float']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'float',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -744,7 +802,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+bool']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'bool',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -819,7 +884,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-bool']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'bool',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -894,7 +966,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+date']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'date',
+                    'direction' => 'ASC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -969,7 +1048,14 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '-date']))->toArray();
+        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
+            self::SORTER => [
+                [
+                    'column'    => 'date',
+                    'direction' => 'DESC',
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1045,11 +1131,19 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         try {
-            (new EntityFilter($this->em))->getData(new GridRequestDto([self::ORDER => '+Unknown']))->toArray();
+            (new EntityFilter($this->em))->getData(new GridRequestDto([
+                self::SORTER => [
+                    [
+                        'column'    => 'Unknown',
+                        'direction' => 'ASC',
+                    ],
+                ],
+            ]));
             self::assertEquals(TRUE, FALSE);
         } catch (GridException $e) {
             $this->assertEquals(GridException::SORT_COLS_ERROR, $e->getCode());
-            $this->assertEquals('Column [Unknown] is not defined for sorting.', $e->getMessage());
+            $this->assertEquals("Column 'Unknown' cannot be used for sorting! Have you forgotten add it to 'Tests\Filter\EntityFilter::orderCols'?",
+                $e->getMessage());
         }
     }
 
@@ -1059,8 +1153,16 @@ final class FilterTest extends TestCaseAbstract
     public function testConditions(): void
     {
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"string": "String 1"}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'string',
+                        'value'    => ['String 1'],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1073,8 +1175,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"int": 2}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => ['2'],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1087,8 +1197,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"float": 3.3}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'float',
+                        'value'    => [3.3],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1101,8 +1219,23 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"bool": true, "string": "String 4"}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'bool',
+                        'value'    => [TRUE],
+                        'operator' => 'EQ',
+                    ],
+                ],
+                [
+                    [
+                        'column'   => 'string',
+                        'value'    => ['String 4'],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1115,8 +1248,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => sprintf('{"date": "%s"}', (clone $this->today)->modify('1 day')->format(self::DATETIME)),
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'date',
+                        'value'    => [(clone $this->today)->modify('1 day')->format(self::DATETIME)],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1128,8 +1269,18 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
 
-        $dto    = new GridRequestDto([self::FILTER => ['{"int": [6, 7, 8]}']]);
-        $result = (new EntityFilter($this->em))->getData($dto)->toArray();
+        $dto    = new GridRequestDto([
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => [6, 7, 8],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]);
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1155,15 +1306,18 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
         self::assertEquals([
-            'filter'  => ['int' => '6,7,8'],
-            'page'    => NULL,
-            'limit'   => 10,
-            'total'   => 3,
-            'orderby' => NULL,
+            'filter'       => '[[{"column":"int","value":[6,7,8],"operator":"EQ"}]]',
+            'page'         => 1,
+            'search'       => NULL,
+            'itemsPerPage' => 10,
+            'total'        => 3,
+            'sorter'       => NULL,
         ], $dto->getParamsForHeader());
 
-        $dto    = new GridRequestDto([self::FILTER => '{"_MODIFIER_SEARCH": "9"}']);
-        $result = (new EntityFilter($this->em))->getData($dto)->toArray();
+        $dto    = new GridRequestDto([
+            self::SEARCH => '9',
+        ]);
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1176,16 +1330,25 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
         self::assertEquals([
-            'filter'  => ['search' => '9'],
-            'page'    => NULL,
-            'limit'   => 10,
-            'total'   => 1,
-            'orderby' => NULL,
+            'filter'       => '[]',
+            'search'       => '9',
+            'page'         => 1,
+            'itemsPerPage' => 10,
+            'total'        => 1,
+            'sorter'       => NULL,
         ], $dto->getParamsForHeader());
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"int_gte": 8}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => [8],
+                        'operator' => 'GTE',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1207,8 +1370,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"int_gt": 8}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => [8],
+                        'operator' => 'GT',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1222,8 +1393,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"int_lt": 1}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => [1],
+                        'operator' => 'LT',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1237,8 +1416,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"int_lte": 1}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'int',
+                        'value'    => [1],
+                        'operator' => 'LTE',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1260,8 +1447,16 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"custom_string": "String 0"}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'custom_string',
+                        'value'    => ['String 0'],
+                        'operator' => 'EQ',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1274,13 +1469,27 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"string": null}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'string',
+                        'operator' => 'EMPTY',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([], $result);
 
         $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER => '{"string": "_MODIFIER_VAL_NOT_NULL"}',
-        ]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'string',
+                        'operator' => 'NEMPTY',
+                    ],
+                ],
+            ],
+        ]), ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1356,19 +1565,38 @@ final class FilterTest extends TestCaseAbstract
         ], $result);
 
         $result = (new EntityFilter($this->em))->getData((new GridRequestDto([
-            self::FILTER => '{"string": "_MODIFIER_VAL_NOT_NULL"}',
-        ]))->setAdditionalFilters(['string' => NULL]))->toArray();
+            self::FILTER => [
+                [
+                    [
+                        'column'   => 'string',
+                        'operator' => 'NEMPTY',
+                    ],
+                ],
+            ],
+        ]))->setAdditionalFilters(
+            [
+                [
+                    [
+                        'column'   => 'string',
+                        'operator' => 'EMPTY',
+                    ],
+                ],
+            ]
+        ), ['date']);
         self::assertEquals([], $result);
 
-        $dto    = new GridRequestDto([self::FILTER => '{"search": "Unknown"}']);
-        $result = (new EntityFilter($this->em))->getData($dto)->toArray();
+        $dto    = new GridRequestDto([
+            self::SEARCH => 'Unknown',
+        ]);
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([], $result);
         self::assertEquals([
-            'filter'  => ['search' => 'Unknown'],
-            'page'    => NULL,
-            'limit'   => 10,
-            'total'   => 0,
-            'orderby' => NULL,
+            'filter'       => '[]',
+            'page'         => 1,
+            'itemsPerPage' => 10,
+            'search'       => 'Unknown',
+            'total'        => 0,
+            'sorter'       => NULL,
         ], $dto->getParamsForHeader());
     }
 
@@ -1377,8 +1605,15 @@ final class FilterTest extends TestCaseAbstract
      */
     public function testPagination(): void
     {
-        $dto    = new GridRequestDto([self::ORDER => '+id', self::PAGE => '3', self::LIMIT => '2']);
-        $result = (new EntityFilter($this->em))->getData($dto)->toArray();
+        $dto    = new GridRequestDto([
+            self::SORTER    => [
+                [
+                    'column'    => 'id',
+                    'direction' => 'ASC',
+                ],
+            ], self::PAGING => [self::PAGE => '3', self::ITEMS_PER_PAGE => '2'],
+        ]);
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1397,15 +1632,23 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
         self::assertEquals([
-            'filter'  => [],
-            'orderby' => '+id',
-            'page'    => 3,
-            'limit'   => 2,
-            'total'   => 10,
+            'filter'       => '[]',
+            'sorter'       => '[{"column":"id","direction":"ASC"}]',
+            'page'         => 3,
+            'itemsPerPage' => 2,
+            'total'        => 10,
+            'search'       => NULL,
         ], $dto->getParamsForHeader());
 
-        $dto    = (new GridRequestDto([self::ORDER => '+id', self::PAGE => '3']))->setLimit(2);
-        $result = (new EntityFilter($this->em))->getData($dto)->toArray();
+        $dto    = (new GridRequestDto([
+            self::SORTER    => [
+                [
+                    'column'    => 'id',
+                    'direction' => 'ASC',
+                ],
+            ], self::PAGING => [self::PAGE => '3'],
+        ]))->setItemsPerPage(2);
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1424,17 +1667,22 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
         self::assertEquals([
-            'filter'  => [],
-            'orderby' => '+id',
-            'page'    => 3,
-            'limit'   => 2,
-            'total'   => 10,
+            'filter'       => '[]',
+            'sorter'       => '[{"column":"id","direction":"ASC"}]',
+            'page'         => 3,
+            'itemsPerPage' => 2,
+            'search'       => NULL,
+            'total'        => 10,
         ], $dto->getParamsForHeader());
 
         $document = (new EntityFilter($this->em));
         $this->setProperty($document, 'countQuery', NULL);
-        $dto    = new GridRequestDto([self::ORDER => '+id', self::PAGE => '3', self::LIMIT => '2']);
-        $result = $document->getData($dto)->toArray();
+        $dto    = new GridRequestDto([
+            self::SORTER    => [
+                ['direction' => 'ASC', 'column' => 'id'],
+            ], self::PAGING => [self::PAGE => '3', self::ITEMS_PER_PAGE => '2'],
+        ]);
+        $result = $document->getData($dto, ['date']);
         self::assertEquals([
             [
                 'id'     => $result[0]['id'],
@@ -1453,139 +1701,13 @@ final class FilterTest extends TestCaseAbstract
             ],
         ], $result);
         self::assertEquals([
-            'filter'  => [],
-            'orderby' => '+id',
-            'page'    => 3,
-            'limit'   => 2,
-            'total'   => 10,
+            'filter'       => '[]',
+            'sorter'       => '[{"direction":"ASC","column":"id"}]',
+            'page'         => 3,
+            'itemsPerPage' => 2,
+            'search'       => NULL,
+            'total'        => 10,
         ], $dto->getParamsForHeader());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testAdvancedConditions(): void
-    {
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::ADVANCED_FILTER => json_encode([
-                [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'EQ',
-                        'value'     => 'String 1',
-                    ], [
-                        'column'    => 'int',
-                        'operation' => 'EQ',
-                        'value'     => 1,
-                    ], [
-                        'column'    => 'bool',
-                        'operation' => 'EQ',
-                        'value'     => TRUE,
-                    ],
-                ], [
-                    [
-                        'column'    => 'bool',
-                        'operation' => 'EQ',
-                        'value'     => FALSE,
-                    ],
-                ],
-            ]),
-        ]))->toArray();
-        self::assertEquals([
-            [
-                'id'     => $result[0]['id'],
-                'string' => 'String 1',
-                'int'    => 1,
-                'float'  => 1.1,
-                'bool'   => FALSE,
-                'date'   => $this->today->modify('1 day')->format(self::DATETIME),
-            ],
-        ], $result);
-
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::ADVANCED_FILTER => json_encode([
-                [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'LIKE',
-                        'value'     => 'ri',
-                    ],
-                ], [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'STARTS',
-                        'value'     => 'St',
-                    ],
-                ], [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'ENDS',
-                        'value'     => 'ng 1',
-                    ],
-                ], [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'FL',
-                    ],
-                ],
-            ]),
-        ]))->toArray();
-        self::assertEquals([
-            [
-                'id'     => $result[0]['id'],
-                'string' => 'String 1',
-                'int'    => 1,
-                'float'  => 1.1,
-                'bool'   => FALSE,
-                'date'   => $this->today->format(self::DATETIME),
-            ],
-        ], $result);
-
-        $result = (new EntityFilter($this->em))->getData(new GridRequestDto([
-            self::FILTER          => '{"string": "String 1"}',
-            self::ADVANCED_FILTER => json_encode([
-                [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'STARTS',
-                        'value'     => 'St',
-                    ],
-                ], [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'LIKE',
-                        'value'     => 'ri',
-                    ],
-                ], [
-                    [
-                        'column'    => 'string',
-                        'operation' => 'ENDS',
-                        'value'     => 'ng 1',
-                    ],
-                ], [
-                    [
-                        'column'    => 'custom_string',
-                        'operation' => 'EQ',
-                        'value'     => 'String 1',
-                    ],
-                ], [
-                    [
-                        'column'    => 'custom_string',
-                        'operation' => 'FL',
-                    ],
-                ],
-            ]),
-        ]))->toArray();
-        self::assertEquals([
-            [
-                'id'     => $result[0]['id'],
-                'string' => 'String 1',
-                'int'    => 1,
-                'float'  => 1.1,
-                'bool'   => FALSE,
-                'date'   => $this->today->format(self::DATETIME),
-            ],
-        ], $result);
     }
 
 }

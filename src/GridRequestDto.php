@@ -2,25 +2,23 @@
 
 namespace Hanaboso\DataGrid;
 
-use Hanaboso\DataGrid\Query\QueryModifier;
-use Throwable;
-
 /**
- * Class GridResponseAbstract
+ * Class GridRequestDto
  *
  * @package Hanaboso\DataGrid
  */
 class GridRequestDto implements GridRequestDtoInterface
 {
 
-    public const  LIMIT           = 'limit';
-    private const FILTER          = 'filter';
-    private const PAGE            = 'page';
-    private const TOTAL           = 'total';
-    private const ORDER_BY        = 'orderby';
-    private const DEFAULT_LIMIT   = 10;
-    private const SEARCH          = 'search';
-    private const ADVANCED_FILTER = 'advanced_filter';
+    public const  ITEMS          = 'items';
+    public const  ITEMS_PER_PAGE = 'itemsPerPage';
+    public const  FILTER         = 'filter';
+    public const  PAGE           = 'page';
+    public const  PAGING         = 'paging';
+    public const  TOTAL          = 'total';
+    public const  SORTER         = 'sorter';
+    public const  SEARCH         = 'search';
+    private const DEFAULT_LIMIT  = 10;
 
     /**
      * @var array
@@ -40,7 +38,7 @@ class GridRequestDto implements GridRequestDtoInterface
     /**
      * @var int
      */
-    private $limit = 0;
+    private $itemsPerPage = 0;
 
     /**
      * GridRequestDto constructor.
@@ -53,33 +51,23 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
+     * @param bool $withAdditional
+     *
      * @return array
      */
-    public function getFilter(): array
+    public function getFilter(bool $withAdditional = TRUE): array
     {
-        if (array_key_exists(self::FILTER, $this->headers)) {
-            $filter = json_decode($this->getHeader(self::FILTER), TRUE);
-            if (isset($filter[self::SEARCH])) {
-                $filter[QueryModifier::FILTER_SEARCH_KEY] = $filter[self::SEARCH];
-                unset($filter[self::SEARCH]);
-            }
+        $filter = [];
 
+        if (array_key_exists(self::FILTER, $this->headers)) {
+            $filter = $this->headers[self::FILTER] ?: [];
+        }
+
+        if ($withAdditional) {
             return array_merge($filter, $this->filter);
         }
 
-        return $this->filter;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAdvancedFilter(): array
-    {
-        if (array_key_exists(self::ADVANCED_FILTER, $this->headers)) {
-            return json_decode($this->getHeader(self::ADVANCED_FILTER), TRUE);
-        }
-
-        return [];
+        return $filter;
     }
 
     /**
@@ -99,37 +87,37 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     public function getPage(): int
     {
-        if (array_key_exists(self::PAGE, $this->headers)) {
-            return intval($this->getHeader(self::PAGE));
+        if (array_key_exists(self::PAGING, $this->headers)) {
+            return (int) ($this->headers[self::PAGING][self::PAGE] ?? 1);
         }
 
-        return 0;
+        return 1;
     }
 
     /**
      * @return int
      */
-    public function getLimit(): int
+    public function getItemsPerPage(): int
     {
-        if ($this->limit !== 0) {
-            return $this->limit;
+        if ($this->itemsPerPage !== 0) {
+            return $this->itemsPerPage;
         }
 
-        if (array_key_exists(self::LIMIT, $this->headers)) {
-            return (int) $this->getHeader(self::LIMIT);
+        if (array_key_exists(self::PAGING, $this->headers)) {
+            return (int) ($this->headers[self::PAGING][self::ITEMS_PER_PAGE] ?? self::DEFAULT_LIMIT);
         }
 
         return self::DEFAULT_LIMIT;
     }
 
     /**
-     * @param int $limit
+     * @param int $itemsPerPage
      *
      * @return GridRequestDto
      */
-    public function setLimit(int $limit): GridRequestDto
+    public function setItemsPerPage(int $itemsPerPage): GridRequestDto
     {
-        $this->limit = $limit;
+        $this->itemsPerPage = $itemsPerPage;
 
         return $this;
     }
@@ -139,8 +127,8 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     private function getOrderByForHeader()
     {
-        if (array_key_exists(self::ORDER_BY, $this->headers)) {
-            return $this->getHeader(self::ORDER_BY);
+        if (array_key_exists(self::SORTER, $this->headers)) {
+            return json_encode($this->headers[self::SORTER], JSON_THROW_ON_ERROR) ?: '';
         }
 
         return NULL;
@@ -151,19 +139,8 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     public function getOrderBy(): array
     {
-        if (array_key_exists(self::ORDER_BY, $this->headers) && $this->getHeader(self::ORDER_BY)) {
-
-            preg_match('/[+-]/', $this->getHeader(self::ORDER_BY), $orderArray);
-
-            if (reset($orderArray) == '+') {
-                $order = 'ASC';
-            } else {
-                $order = 'DESC';
-            }
-
-            $columnName = preg_replace('/[+-]/', '', $this->getHeader(self::ORDER_BY));
-
-            return [$columnName, $order];
+        if (array_key_exists(self::SORTER, $this->headers)) {
+            return $this->headers[self::SORTER] ?: [];
         }
 
         return [];
@@ -195,51 +172,31 @@ class GridRequestDto implements GridRequestDtoInterface
     public function getParamsForHeader(): array
     {
         return [
-            self::FILTER   => $this->formatFilterForHeader($this->getFilter()),
-            self::PAGE     => $this->getPage(),
-            self::LIMIT    => $this->getLimit(),
-            self::TOTAL    => $this->total,
-            self::ORDER_BY => $this->getOrderByForHeader(),
+            self::FILTER         => $this->formatFilterForHeader($this->getFilter()),
+            self::PAGE           => $this->getPage(),
+            self::ITEMS_PER_PAGE => $this->getItemsPerPage(),
+            self::TOTAL          => $this->total,
+            self::SEARCH         => $this->getSearch(),
+            self::SORTER         => $this->getOrderByForHeader(),
         ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSearch(): ?string
+    {
+        return $this->headers[self::SEARCH] ?? NULL;
     }
 
     /**
      * @param array $data
      *
-     * @return array
+     * @return string|null
      */
-    protected function formatFilterForHeader(array $data): array
+    protected function formatFilterForHeader(array $data): ?string
     {
-        foreach ($data as $key => &$item) {
-            if (is_array($item)) {
-                try {
-                    $item = implode(',', $item);
-                } catch (Throwable $t) {
-                    $item = '';
-                }
-            }
-
-            if ($key === QueryModifier::FILTER_SEARCH_KEY) {
-                $data[self::SEARCH] = $item;
-                unset($data[$key]);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
-    private function getHeader(string $key): string
-    {
-        if (is_array($this->headers[$key])) {
-            return (string) ($this->headers[$key][0] ?? '');
-        } else {
-            return (string) $this->headers[$key];
-        }
+        return json_encode($data, JSON_THROW_ON_ERROR) ?: NULL;
     }
 
 }

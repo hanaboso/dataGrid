@@ -11,14 +11,11 @@ interface GridRequestDtoInterface
 {
 
     /**
+     * @param bool $withAdditional
+     *
      * @return array
      */
-    public function getFilter(): array;
-
-    /**
-     * @return array
-     */
-    public function getAdvancedFilter(): array;
+    public function getFilter(bool $withAdditional = TRUE): array;
 
     /**
      * @return int
@@ -26,9 +23,14 @@ interface GridRequestDtoInterface
     public function getPage(): int;
 
     /**
+     * @return string|null
+     */
+    public function getSearch(): ?string;
+
+    /**
      * @return int
      */
-    public function getLimit(): int;
+    public function getItemsPerPage(): int;
 
     /**
      * @return array
@@ -41,5 +43,10 @@ interface GridRequestDtoInterface
      * @return GridRequestDtoInterface
      */
     public function setTotal(int $total): GridRequestDtoInterface;
+
+    /**
+     * @return int
+     */
+    public function getTotal(): int;
 
 }

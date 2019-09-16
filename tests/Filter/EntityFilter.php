@@ -5,7 +5,6 @@ namespace Tests\Filter;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\QueryBuilder;
 use Hanaboso\DataGrid\GridFilterAbstract;
-use Hanaboso\DataGrid\Query\QueryModifier;
 use Tests\Entity\Entity;
 
 /**
@@ -26,10 +25,6 @@ final class EntityFilter extends GridFilterAbstract
         'float'         => 'e.float',
         'bool'          => 'e.bool',
         'date'          => 'e.date',
-        'int_gte'       => 'e.int>=',
-        'int_gt'        => 'e.int>',
-        'int_lt'        => 'e.int<',
-        'int_lte'       => 'e.int<=',
         'custom_string' => 'e.string',
     ];
 
@@ -62,7 +57,7 @@ final class EntityFilter extends GridFilterAbstract
         $this->searchQuery = $this
             ->getRepository()
             ->createQueryBuilder('e')
-            ->select('e.id', 'e.string', 'e.int', 'e.float', 'e.bool', "DATE_FORMAT(e.date, '%Y-%m-%d %H:%i:%s') date");
+            ->select('e.id', 'e.string', 'e.int', 'e.float', 'e.bool', 'e.date');
     }
 
     /**
@@ -87,7 +82,7 @@ final class EntityFilter extends GridFilterAbstract
 
         $this->filterColsCallbacks = [
             'custom_string' => function (QueryBuilder $qb, $value, $name, Composite $c, ?string $operator): void {
-                $c->add(QueryModifier::getCondition($qb, $name, $value, $operator));
+                $c->add(GridFilterAbstract::getCondition($qb, $name, $value, $operator));
             },
         ];
     }
