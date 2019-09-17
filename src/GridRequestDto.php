@@ -88,7 +88,7 @@ class GridRequestDto implements GridRequestDtoInterface
     public function getPage(): int
     {
         if (array_key_exists(self::PAGING, $this->headers)) {
-            return (int) ($this->headers[self::PAGING][self::PAGE] ?? 1);
+            return max((int) ($this->headers[self::PAGING][self::PAGE] ?? 1), 1);
         }
 
         return 1;
@@ -104,7 +104,9 @@ class GridRequestDto implements GridRequestDtoInterface
         }
 
         if (array_key_exists(self::PAGING, $this->headers)) {
-            return (int) ($this->headers[self::PAGING][self::ITEMS_PER_PAGE] ?? self::DEFAULT_LIMIT);
+            $limit = (int) ($this->headers[self::PAGING][self::ITEMS_PER_PAGE] ?? self::DEFAULT_LIMIT);
+
+            return $limit > 0 ? $limit : self::DEFAULT_LIMIT;
         }
 
         return self::DEFAULT_LIMIT;
