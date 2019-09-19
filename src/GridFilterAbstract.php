@@ -116,6 +116,7 @@ abstract class GridFilterAbstract
      */
     public function getData(GridRequestDtoInterface $gridRequestDto, array $dateFields = []): array
     {
+        $this->prepareSearchQuery();
         $this->processSortations($gridRequestDto);
         $this->processConditions($gridRequestDto, $this->searchQuery);
 
