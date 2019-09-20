@@ -15,11 +15,10 @@ final class GridException extends Exception
     public const FETCH_ERROR              = 1;
     public const FETCH_ONE_ERROR          = 2;
     public const MODIFY_RESULT_DATA_ERROR = 3;
-    public const GET_ITERATOR_ERROR       = 4;
+    public const FILTER_COLS_ERROR        = 4;
     public const GET_TOTAL_COUNT_ERROR    = 5;
     public const SEARCH_COLS_ERROR        = 6;
     public const SEARCH_QUERY_NOT_FOUND   = 7;
     public const SORT_COLS_ERROR          = 8;
-    public const FILTER_COLS_ERROR        = 9;
 
 }

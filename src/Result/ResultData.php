@@ -2,12 +2,10 @@
 
 namespace Hanaboso\DataGrid\Result;
 
-use ArrayIterator;
 use DateTime;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Exception;
 use Hanaboso\DataGrid\Exception\GridException;
 
 /**
@@ -24,11 +22,6 @@ class ResultData
      * @var Query
      */
     private $query;
-
-    /**
-     * @var ArrayIterator|NULL
-     */
-    private $iterator;
 
     /**
      * @var bool
@@ -54,7 +47,7 @@ class ResultData
      */
     public function toArray(int $hydrationMode = AbstractQuery::HYDRATE_OBJECT, array $dateTimes = []): array
     {
-        $data = iterator_to_array(clone $this->getIterator($hydrationMode), FALSE);
+        $data = $this->getResult($hydrationMode);
 
         if ($dateTimes) {
             foreach ($data as $key => $item) {
@@ -76,40 +69,15 @@ class ResultData
     /**
      * @param int $hydrationMode
      *
-     * @return ArrayIterator
-     * @throws GridException
+     * @return array
      */
-    private function getIterator($hydrationMode = AbstractQuery::HYDRATE_OBJECT): ArrayIterator
+    private function getResult($hydrationMode = AbstractQuery::HYDRATE_OBJECT): array
     {
-        if ($this->iterator !== NULL) {
-            return $this->iterator;
-        }
         $this->query->setHydrationMode($hydrationMode);
-        try {
-            if ($this->fetchJoinCollection && ($this->query->getMaxResults() > 0 || $this->query->getFirstResult() > 0)
-            ) {
-                $this->iterator = $this->createPaginatedQuery($this->query)->getIterator();
-            } else {
-                $this->iterator = new ArrayIterator($this->query->getResult(AbstractQuery::HYDRATE_OBJECT));
-            }
-
-            return $this->iterator;
-        } catch (Exception $e) {
-            throw new GridException($e->getMessage(), GridException::GET_ITERATOR_ERROR, $e);
-        }
-    }
-
-    /**
-     * @param Query $query
-     *
-     * @return Paginator
-     */
-    private function createPaginatedQuery(Query $query): Paginator
-    {
-        $paginated = new Paginator($query, $this->fetchJoinCollection);
+        $paginated = new Paginator($this->query, $this->fetchJoinCollection);
         $paginated->setUseOutputWalkers(FALSE);
 
-        return $paginated;
+        return $paginated->getQuery()->execute();
     }
 
 }
