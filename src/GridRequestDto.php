@@ -2,6 +2,8 @@
 
 namespace Hanaboso\DataGrid;
 
+use Hanaboso\DataGrid\Exception\GridException;
+
 /**
  * Class GridRequestDto
  *
@@ -54,6 +56,7 @@ class GridRequestDto implements GridRequestDtoInterface
      * @param bool $withAdditional
      *
      * @return array
+     * @throws GridException
      */
     public function getFilter(bool $withAdditional = TRUE): array
     {
@@ -67,6 +70,24 @@ class GridRequestDto implements GridRequestDtoInterface
             return array_merge($filter, $this->filter);
         }
 
+        foreach ($filter as $row) {
+            if (!is_array($row)) {
+                throw new GridException('Incorrect filter format - must be two nested arrays');
+            }
+
+            foreach ($row as $item) {
+                if (!array_key_exists(GridFilterAbstract::COLUMN, $item)
+                    || !array_key_exists(GridFilterAbstract::OPERATOR, $item)) {
+                    throw new GridException(
+                        sprintf('[%s, %s] filter fields are mandatory',
+                            GridFilterAbstract::OPERATOR,
+                            GridFilterAbstract::COLUMN
+                        )
+                    );
+                }
+            }
+        }
+
         return $filter;
     }
 
@@ -74,6 +95,7 @@ class GridRequestDto implements GridRequestDtoInterface
      * @param array $filter
      *
      * @return GridRequestDto
+     * @throws GridException
      */
     public function setAdditionalFilters(array $filter): self
     {
@@ -138,14 +160,41 @@ class GridRequestDto implements GridRequestDtoInterface
 
     /**
      * @return array
+     * @throws GridException
      */
     public function getOrderBy(): array
     {
+        $sort = [];
         if (array_key_exists(self::SORTER, $this->headers)) {
-            return $this->headers[self::SORTER] ?: [];
+            $sort = $this->headers[self::SORTER] ?: [];
         }
 
-        return [];
+        foreach ($sort as $item) {
+            if (!array_key_exists(GridFilterAbstract::COLUMN, $item)
+                || !array_key_exists(GridFilterAbstract::DIRECTION, $item)) {
+                throw new GridException(
+                    sprintf('Each sorter must contain [%s, %s] keys',
+                        GridFilterAbstract::COLUMN,
+                        GridFilterAbstract::DIRECTION
+                    )
+                );
+            }
+
+            if (!in_array($item[GridFilterAbstract::DIRECTION], [
+                GridFilterAbstract::ASCENDING,
+                GridFilterAbstract::DESCENDING,
+            ])) {
+                throw new GridException(
+                    sprintf('Invalid direction of sorter [%s], valid options: [%s, %s]',
+                        $item[GridFilterAbstract::DIRECTION],
+                        GridFilterAbstract::ASCENDING,
+                        GridFilterAbstract::DESCENDING
+                    )
+                );
+            }
+        }
+
+        return $sort;
     }
 
     /**
@@ -170,6 +219,7 @@ class GridRequestDto implements GridRequestDtoInterface
 
     /**
      * @return array
+     * @throws GridException
      */
     public function getParamsForHeader(): array
     {
