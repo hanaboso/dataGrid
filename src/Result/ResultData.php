@@ -6,7 +6,6 @@ use DateTime;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Hanaboso\DataGrid\Exception\GridException;
 
 /**
  * Class ResultData
@@ -43,7 +42,6 @@ class ResultData
      * @param array $dateTimes
      *
      * @return array
-     * @throws GridException
      */
     public function toArray(int $hydrationMode = AbstractQuery::HYDRATE_OBJECT, array $dateTimes = []): array
     {
