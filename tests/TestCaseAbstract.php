@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests;
+namespace DataGridTests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\FilesystemCache;
@@ -12,15 +12,18 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use Exception;
+use Hanaboso\PhpCheckUtils\PhpUnit\Traits\PrivateTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class TestCaseAbstract
  *
- * @package Tests
+ * @package DataGridTests
  */
 abstract class TestCaseAbstract extends TestCase
 {
+
+    use PrivateTrait;
 
     private const TEMP_DIR = '%s/../temp/Doctrine2.ORM';
     private const HOSTNAME = 'mariadb';
@@ -38,7 +41,7 @@ abstract class TestCaseAbstract extends TestCase
     {
         $reader = new AnnotationReader();
         $driver = new MappingDriverChain();
-        $driver->addDriver(new AnnotationDriver($reader, [sprintf('%s/Entity', __DIR__)]), 'Tests\\Entity');
+        $driver->addDriver(new AnnotationDriver($reader, [sprintf('%s/Entity', __DIR__)]), 'DataGridTests\\Entity');
 
         $configuration = Setup::createAnnotationMetadataConfiguration(
             [sprintf('%s/Entity', __DIR__)],

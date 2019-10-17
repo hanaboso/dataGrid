@@ -6,4 +6,3 @@ includes:
 
 parameters:
     ignoreErrors:
-        - '#Cannot call method toArray() on array|Hanaboso\\DataGrid\\Result\\ResultData\.#'

@@ -1,26 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Integration;
+namespace DataGridTests\Integration;
 
+use DataGridTests\Entity\Entity;
+use DataGridTests\Filter\EntityFilter;
+use DataGridTests\TestCaseAbstract;
 use DateTime;
 use DateTimeZone;
 use Exception;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\GridRequestDto;
-use Tests\Entity\Entity;
-use Tests\Filter\EntityFilter;
-use Tests\PrivateTrait;
-use Tests\TestCaseAbstract;
 
 /**
  * Class FilterTest
  *
- * @package Tests\Integration
+ * @package DataGridTests\Integration
  */
 final class FilterTest extends TestCaseAbstract
 {
-
-    use PrivateTrait;
 
     private const DATETIME = 'Y-m-d H:i:s';
 
@@ -1142,7 +1139,7 @@ final class FilterTest extends TestCaseAbstract
             self::assertEquals(TRUE, FALSE);
         } catch (GridException $e) {
             $this->assertEquals(GridException::SORT_COLS_ERROR, $e->getCode());
-            $this->assertEquals("Column 'Unknown' cannot be used for sorting! Have you forgotten add it to 'Tests\Filter\EntityFilter::orderCols'?",
+            $this->assertEquals("Column 'Unknown' cannot be used for sorting! Have you forgotten add it to 'DataGridTests\Filter\EntityFilter::orderCols'?",
                 $e->getMessage());
         }
     }

@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Integration;
+namespace DataGridTests\Integration;
 
+use DataGridTests\Entity\Entity;
+use DataGridTests\TestCaseAbstract;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Tests\Entity\Entity;
-use Tests\TestCaseAbstract;
 
 /**
  * Class DatabaseConfigurationTest
  *
- * @package Tests\Integration
+ * @package DataGridTests\Integration
  */
 final class DatabaseConfigurationTest extends TestCaseAbstract
 {

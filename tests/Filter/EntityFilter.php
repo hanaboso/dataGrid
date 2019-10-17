@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Filter;
+namespace DataGridTests\Filter;
 
+use DataGridTests\Entity\Entity;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\QueryBuilder;
 use Hanaboso\DataGrid\GridFilterAbstract;
-use Tests\Entity\Entity;
 
 /**
  * Class EntityFilter
  *
- * @package Tests\Filter
+ * @package DataGridTests\Filter
  */
 final class EntityFilter extends GridFilterAbstract
 {
