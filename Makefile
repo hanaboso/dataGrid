@@ -7,6 +7,7 @@ DM=docker-compose exec -T mariadb
 .env:
 	sed -e "s|{DEV_UID}|$(shell id -u)|g" \
 		-e "s|{DEV_GID}|$(shell id -u)|g" \
+		-e "s/{SSH_AUTH}/$(shell if [ "$(shell uname)" = "Linux" ]; then echo "\/tmp\/.ssh-auth-sock"; else echo '\/tmp\/.nope'; fi)/g" \
 		.env.dist >> .env;
 
 # Docker
@@ -29,7 +30,7 @@ composer-outdated:
 
 # Console
 clear-cache:
-	$(DE) sudo rm -rf temp
+	$(DE) rm -rf temp
 
 # App dev
 init-dev: docker-up-force composer-install

@@ -79,7 +79,8 @@ class GridRequestDto implements GridRequestDtoInterface
                 if (!array_key_exists(GridFilterAbstract::COLUMN, $item)
                     || !array_key_exists(GridFilterAbstract::OPERATOR, $item)) {
                     throw new GridException(
-                        sprintf('[%s, %s] filter fields are mandatory',
+                        sprintf(
+                            '[%s, %s] filter fields are mandatory',
                             GridFilterAbstract::OPERATOR,
                             GridFilterAbstract::COLUMN
                         )
@@ -173,19 +174,24 @@ class GridRequestDto implements GridRequestDtoInterface
             if (!array_key_exists(GridFilterAbstract::COLUMN, $item)
                 || !array_key_exists(GridFilterAbstract::DIRECTION, $item)) {
                 throw new GridException(
-                    sprintf('Each sorter must contain [%s, %s] keys',
+                    sprintf(
+                        'Each sorter must contain [%s, %s] keys',
                         GridFilterAbstract::COLUMN,
                         GridFilterAbstract::DIRECTION
                     )
                 );
             }
 
-            if (!in_array($item[GridFilterAbstract::DIRECTION], [
-                GridFilterAbstract::ASCENDING,
-                GridFilterAbstract::DESCENDING,
-            ])) {
+            if (!in_array(
+                $item[GridFilterAbstract::DIRECTION],
+                [
+                    GridFilterAbstract::ASCENDING,
+                    GridFilterAbstract::DESCENDING,
+                ]
+            )) {
                 throw new GridException(
-                    sprintf('Invalid direction of sorter [%s], valid options: [%s, %s]',
+                    sprintf(
+                        'Invalid direction of sorter [%s], valid options: [%s, %s]',
                         $item[GridFilterAbstract::DIRECTION],
                         GridFilterAbstract::ASCENDING,
                         GridFilterAbstract::DESCENDING

@@ -205,12 +205,14 @@ abstract class GridFilterAbstract
                     !array_key_exists(self::OPERATOR, $orCondition) ||
                     !array_key_exists(self::VALUE, $orCondition) &&
                     !in_array($orCondition[self::OPERATOR], [self::NEMPTY, self::EMPTY], TRUE)) {
-                    throw new LogicException(sprintf(
-                        "Filter must have '%s', '%s' and '%s' field!",
-                        self::COLUMN,
-                        self::OPERATOR,
-                        self::VALUE
-                    ));
+                    throw new LogicException(
+                        sprintf(
+                            "Filter must have '%s', '%s' and '%s' field!",
+                            self::COLUMN,
+                            self::OPERATOR,
+                            self::VALUE
+                        )
+                    );
                 }
 
                 if (!array_key_exists(self::VALUE, $orCondition)) {
@@ -233,12 +235,14 @@ abstract class GridFilterAbstract
                     continue;
                 }
 
-                $expression->add(self::getCondition(
-                    $builder,
-                    $this->filterCols[$column],
-                    $orCondition[self::VALUE],
-                    $orCondition[self::OPERATOR]
-                ));
+                $expression->add(
+                    self::getCondition(
+                        $builder,
+                        $this->filterCols[$column],
+                        $orCondition[self::VALUE],
+                        $orCondition[self::OPERATOR]
+                    )
+                );
             }
 
             if ($hasExpression) {
@@ -388,41 +392,68 @@ abstract class GridFilterAbstract
                     return $builder->expr()->eq($name, self::getValue($value));
                 }
             case self::NEQ:
-                return $builder->expr()->notIn($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->notIn(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::GTE:
-                return $builder->expr()->gte($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->gte(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::GT:
-                return $builder->expr()->gt($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->gt(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::LTE:
-                return $builder->expr()->lte($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->lte(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::LT:
-                return $builder->expr()->lt($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->lt(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::NEMPTY:
                 return $builder->expr()->isNotNull($name);
             case self::EMPTY:
                 return $builder->expr()->isNull($name);
             case self::LIKE:
-                return $builder->expr()->like($name, sprintf("'%%%s%%'",
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%%%s%%'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::STARTS:
-                return $builder->expr()->like($name, sprintf("'%s%%'",
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%s%%'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::ENDS:
-                return $builder->expr()->like($name, sprintf("'%%%s'",
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%%%s'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
             case self::BETWEEN:
                 if (is_array($value) && count($value) >= 2) {
                     return $builder->expr()->between($name, self::getValue($value[0]), self::getValue($value[1]));
@@ -440,9 +471,12 @@ abstract class GridFilterAbstract
 
                 return $builder->expr()->neq($name, self::getValue($value));
             default:
-                return $builder->expr()->eq($name, self::getValue(
-                    is_array($value) ? $value[0] : $value
-                ));
+                return $builder->expr()->eq(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
         }
     }
 
@@ -455,11 +489,11 @@ abstract class GridFilterAbstract
     {
         if (is_numeric($value)) {
             return sprintf('%s', $value);
-        } elseif (is_bool($value)) {
+        } else if (is_bool($value)) {
             return sprintf('%s', $value ? 'true' : 'false');
-        } elseif (is_string($value)) {
+        } else if (is_string($value)) {
             return sprintf('\'%s\'', $value);
-        } elseif (is_null($value)) {
+        } else if (is_null($value)) {
             return '\'\'';
         }
 

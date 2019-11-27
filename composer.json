@@ -1,24 +1,24 @@
 {
-  "name": "hanaboso/data-grid",
-  "license": "proprietary",
-  "description": "Data grid",
-  "autoload": {
-    "psr-4": {
-      "Hanaboso\\DataGrid\\": "src/"
+    "name": "hanaboso/data-grid",
+    "license": "proprietary",
+    "description": "Data grid",
+    "autoload": {
+        "psr-4": {
+            "Hanaboso\\DataGrid\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DataGridTests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.3",
+        "ext-json": "*",
+        "beberlei/doctrineextensions": "^1.2",
+        "doctrine/orm": "^2.7"
+    },
+    "require-dev": {
+        "hanaboso/php-check-utils": "^1.0"
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "DataGridTests\\": "tests/"
-    }
-  },
-  "require": {
-    "php": "^7.3",
-    "ext-json": "*",
-    "beberlei/doctrineextensions": "^1.2",
-    "doctrine/orm": "^2.6"
-  },
-  "require-dev": {
-    "hanaboso/php-check-utils": "^1.0"
-  }
 }

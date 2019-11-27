@@ -2,14 +2,14 @@ version: '3.3'
 
 services:
     php:
-        image: dkr.hanaboso.net/pipes/pipes/php-dev:dev
+        image: hanabosocom/php-dev:php-7.3
         user: ${DEV_UID}:${DEV_GID}
         environment:
             DEV_UID: ${DEV_UID}
             DEV_GID: ${DEV_GID}
         volumes:
             - ./:/var/www
-            - ${SSH_AUTH_SOCK}:/tmp/bound-ssh-agent
+            - ${SSH_AUTH_SOCK}:${SSH_AUTH}
             - ${HOME}/.composer:/srv/.composer
 
     mariadb:

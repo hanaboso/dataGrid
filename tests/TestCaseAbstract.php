@@ -55,13 +55,16 @@ abstract class TestCaseAbstract extends TestCase
         $configuration->setNamingStrategy(new UnderscoreNamingStrategy());
         $configuration->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
 
-        $this->em = EntityManager::create([
-            'driver'   => 'pdo_mysql',
-            'host'     => self::HOSTNAME,
-            'user'     => 'root',
-            'password' => 'root',
-            'dbname'   => self::DATABASE,
-        ], $configuration);
+        $this->em = EntityManager::create(
+            [
+                'driver'   => 'pdo_mysql',
+                'host'     => self::HOSTNAME,
+                'user'     => 'root',
+                'password' => 'root',
+                'dbname'   => self::DATABASE,
+            ],
+            $configuration
+        );
 
         $schemaTool = new SchemaTool($this->em);
         $schemaTool->dropSchema($this->em->getMetadataFactory()->getAllMetadata());
