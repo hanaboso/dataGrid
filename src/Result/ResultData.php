@@ -12,7 +12,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  *
  * @package Hanaboso\DataGrid\Result
  */
-class ResultData
+final class ResultData
 {
 
     private const DATE_TIME = 'Y-m-d H:i:s';
@@ -20,12 +20,12 @@ class ResultData
     /**
      * @var Query
      */
-    private $query;
+    private Query $query;
 
     /**
      * @var bool
      */
-    private $fetchJoinCollection = TRUE;
+    private bool $fetchJoinCollection = TRUE;
 
     /**
      * ResultData constructor.
@@ -38,10 +38,10 @@ class ResultData
     }
 
     /**
-     * @param int   $hydrationMode
-     * @param array $dateTimes
+     * @param int     $hydrationMode
+     * @param mixed[] $dateTimes
      *
-     * @return array
+     * @return mixed[]
      */
     public function toArray(int $hydrationMode = AbstractQuery::HYDRATE_OBJECT, array $dateTimes = []): array
     {
@@ -67,7 +67,7 @@ class ResultData
     /**
      * @param int $hydrationMode
      *
-     * @return array
+     * @return mixed[]
      */
     private function getResult($hydrationMode = AbstractQuery::HYDRATE_OBJECT): array
     {

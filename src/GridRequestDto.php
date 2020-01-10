@@ -3,6 +3,7 @@
 namespace Hanaboso\DataGrid;
 
 use Hanaboso\DataGrid\Exception\GridException;
+use Hanaboso\Utils\String\Json;
 
 /**
  * Class GridRequestDto
@@ -23,29 +24,29 @@ class GridRequestDto implements GridRequestDtoInterface
     private const DEFAULT_LIMIT  = 10;
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    private $headers;
+    private array $headers;
 
     /**
      * @var int
      */
-    private $total = 0;
+    private int $total = 0;
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    private $filter = [];
+    private array $filter = [];
 
     /**
      * @var int
      */
-    private $itemsPerPage = 0;
+    private int $itemsPerPage = 0;
 
     /**
      * GridRequestDto constructor.
      *
-     * @param array $headers
+     * @param mixed[] $headers
      */
     public function __construct(array $headers)
     {
@@ -55,7 +56,7 @@ class GridRequestDto implements GridRequestDtoInterface
     /**
      * @param bool $withAdditional
      *
-     * @return array
+     * @return mixed[]
      * @throws GridException
      */
     public function getFilter(bool $withAdditional = TRUE): array
@@ -93,7 +94,7 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @param array $filter
+     * @param mixed[] $filter
      *
      * @return GridRequestDto
      * @throws GridException
@@ -148,19 +149,19 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return null|string|array
+     * @return null|string
      */
-    private function getOrderByForHeader()
+    private function getOrderByForHeader(): ?string
     {
         if (array_key_exists(self::SORTER, $this->headers)) {
-            return json_encode($this->headers[self::SORTER], JSON_THROW_ON_ERROR) ?: '';
+            return Json::encode($this->headers[self::SORTER]);
         }
 
         return NULL;
     }
 
     /**
-     * @return array
+     * @return mixed[]
      * @throws GridException
      */
     public function getOrderBy(): array
@@ -171,6 +172,10 @@ class GridRequestDto implements GridRequestDtoInterface
         }
 
         foreach ($sort as $item) {
+            if (!is_array($item)) {
+                throw new GridException('Incorrect sorter format - must be two nested arrays');
+            }
+
             if (!array_key_exists(GridFilterAbstract::COLUMN, $item)
                 || !array_key_exists(GridFilterAbstract::DIRECTION, $item)) {
                 throw new GridException(
@@ -184,10 +189,7 @@ class GridRequestDto implements GridRequestDtoInterface
 
             if (!in_array(
                 $item[GridFilterAbstract::DIRECTION],
-                [
-                    GridFilterAbstract::ASCENDING,
-                    GridFilterAbstract::DESCENDING,
-                ]
+                [GridFilterAbstract::ASCENDING, GridFilterAbstract::DESCENDING,]
             )) {
                 throw new GridException(
                     sprintf(
@@ -224,7 +226,7 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return array
+     * @return mixed[]
      * @throws GridException
      */
     public function getParamsForHeader(): array
@@ -233,7 +235,7 @@ class GridRequestDto implements GridRequestDtoInterface
             self::FILTER         => $this->formatFilterForHeader($this->getFilter()),
             self::PAGE           => $this->getPage(),
             self::ITEMS_PER_PAGE => $this->getItemsPerPage(),
-            self::TOTAL          => $this->total,
+            self::TOTAL          => $this->getTotal(),
             self::SEARCH         => $this->getSearch(),
             self::SORTER         => $this->getOrderByForHeader(),
         ];
@@ -248,13 +250,13 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @param array $data
+     * @param mixed[] $data
      *
-     * @return string|null
+     * @return string
      */
-    protected function formatFilterForHeader(array $data): ?string
+    protected function formatFilterForHeader(array $data): string
     {
-        return json_encode($data, JSON_THROW_ON_ERROR) ?: NULL;
+        return Json::encode($data);
     }
 
 }

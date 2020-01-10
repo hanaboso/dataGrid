@@ -10,6 +10,7 @@ use DateTimeZone;
 use Exception;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\GridRequestDto;
+use LogicException;
 
 /**
  * Class FilterTest
@@ -1952,6 +1953,592 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 10,
             ],
             $dto->getParamsForHeader()
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetFilter(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::FILTER => [[['column' => 'a', 'operator' => 'b']]],
+            ]
+        );
+
+        self::assertNotEmpty($dto->getFilter(FALSE));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetFilterNotArray(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::FILTER => ['a'],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        $dto->getFilter(FALSE);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetFilterMissingFields(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::FILTER => [[[]]],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        $dto->getFilter(FALSE);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrderBy(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::SORTER => [['column' => 'a', 'direction' => 'b']],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        $dto->getOrderBy();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrderByNotArray(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::SORTER => ['a'],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        $dto->getOrderBy();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrderByMissingFields(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::SORTER => [[[]]],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        $dto->getOrderBy();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testProcessConditionBadFormat(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::FILTER => [[['column' => 'a', 'operator' => 'b']]],
+            ]
+        );
+
+        self::expectException(LogicException::class);
+        (new EntityFilter($this->em))->getData($dto);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testProcessConditionMissingSearchFields(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::SEARCH => 'a',
+            ]
+        );
+
+        $f = (new EntityFilter($this->em));
+        $this->setProperty($f, 'searchableCols', []);
+
+        self::expectException(GridException::class);
+        self::expectExceptionCode(GridException::SEARCH_COLS_ERROR);
+        $f->getData($dto);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testProcessCondition(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::SEARCH => 'a',
+            ]
+        );
+
+        $f = (new EntityFilter($this->em));
+        $this->setProperty($f, 'filterCols', []);
+
+        self::expectException(GridException::class);
+        self::expectExceptionCode(GridException::SEARCH_COLS_ERROR);
+        $f->getData($dto);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCheckFilterColumn(): void
+    {
+        $dto = new GridRequestDto(
+            [
+                self::FILTER => [[['column' => 'a', 'operator' => 'b', 'value' => 'c']]],
+            ]
+        );
+
+        self::expectException(GridException::class);
+        self::expectExceptionCode(GridException::FILTER_COLS_ERROR);
+        (new EntityFilter($this->em))->getData($dto);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionEq(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 1',
+                                'operator' => 'EQ',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionEqNull(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => NULL,
+                                'operator' => 'EQ',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEmpty($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionNeq(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 0',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 9',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 2',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 3',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 4',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 5',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 6',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 7',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 8',
+                                'operator' => 'NEQ',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionStarts(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'String 1',
+                                'operator' => 'STARTS',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionEnds(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'ing 1',
+                                'operator' => 'ENDS',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionBetween(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 0,
+                                'operator' => 'BETWEEN',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 0',
+                    'int'    => 0,
+                    'float'  => 0.0,
+                    'bool'   => TRUE,
+                    'date'   => $this->today->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => [1, 2],
+                                'operator' => 'BETWEEN',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('+ 1 day')->format(self::DATETIME),
+                ],
+                [
+                    'id'     => $result[1]['id'],
+                    'string' => 'String 2',
+                    'int'    => 2,
+                    'float'  => 2.2,
+                    'bool'   => TRUE,
+                    'date'   => $this->today->modify('+ 1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetConditionNotBetween(): void
+    {
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 0,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 2,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 3,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 4,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 5,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 6,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 7,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 8,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => 9,
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('+ 1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+
+        $result = (new EntityFilter($this->em))->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'int',
+                                'value'    => [0, 9],
+                                'operator' => 'NBETWEEN',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 0',
+                    'int'    => 0,
+                    'float'  => 0.0,
+                    'bool'   => TRUE,
+                    'date'   => $this->today->modify('- 1 day')->format(self::DATETIME),
+                ],
+                [
+                    'id'     => $result[1]['id'],
+                    'string' => 'String 9',
+                    'int'    => 9,
+                    'float'  => 9.9,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('+ 9 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
         );
     }
 

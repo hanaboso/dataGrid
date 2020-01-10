@@ -16,71 +16,89 @@ final class EntityFilter extends GridFilterAbstract
 {
 
     /**
-     * @var string[]
+     * @return mixed[]
      */
-    protected $filterCols = [
-        'id'            => 'e.id',
-        'string'        => 'e.string',
-        'int'           => 'e.int',
-        'float'         => 'e.float',
-        'bool'          => 'e.bool',
-        'date'          => 'e.date',
-        'custom_string' => 'e.string',
-    ];
+    protected function filterCols(): array
+    {
+        return [
+            'id'            => 'e.id',
+            'string'        => 'e.string',
+            'int'           => 'e.int',
+            'float'         => 'e.float',
+            'bool'          => 'e.bool',
+            'date'          => 'e.date',
+            'custom_string' => 'e.string',
+        ];
+    }
 
     /**
-     * @var string[]
+     * @return mixed[]
      */
-    protected $orderCols = [
-        'id'     => 'e.id',
-        'string' => 'e.string',
-        'int'    => 'e.int',
-        'float'  => 'e.float',
-        'bool'   => 'e.bool',
-        'date'   => 'e.date',
-    ];
+    protected function orderCols(): array
+    {
+        return [
+            'id'     => 'e.id',
+            'string' => 'e.string',
+            'int'    => 'e.int',
+            'float'  => 'e.float',
+            'bool'   => 'e.bool',
+            'date'   => 'e.date',
+        ];
+    }
 
     /**
-     * @var string[]
+     * @return mixed[]
      */
-    protected $searchableCols = [
-        'string',
-        'int',
-        'float',
-    ];
+    protected function searchableCols(): array
+    {
+        return [
+            'string',
+            'custom_string',
+            'int',
+            'float',
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    protected function useFetchJoin(): bool
+    {
+        return TRUE;
+    }
 
     /**
      *
      */
-    protected function prepareSearchQuery(): void
+    protected function prepareSearchQuery(): QueryBuilder
     {
-        $this->searchQuery = $this
+        return $this
             ->getRepository()
             ->createQueryBuilder('e')
             ->select('e.id', 'e.string', 'e.int', 'e.float', 'e.bool', 'e.date');
     }
 
     /**
-     *
+     * @return QueryBuilder|null
      */
-    protected function configCustomCountQuery(): void
+    protected function configCustomCountQuery(): ?QueryBuilder
     {
         parent::configCustomCountQuery();
 
-        $this->countQuery = $this
+        return $this
             ->getRepository()
             ->createQueryBuilder('e')
             ->select('COUNT(e.id)');
     }
 
     /**
-     *
+     * @return mixed[]
      */
-    protected function configFilterColsCallbacks(): void
+    protected function configFilterColsCallbacks(): array
     {
         parent::configFilterColsCallbacks();
 
-        $this->filterColsCallbacks = [
+        return [
             'custom_string' => function (QueryBuilder $qb, $value, $name, Composite $c, ?string $operator): void {
                 $c->add(GridFilterAbstract::getCondition($qb, $name, $value, $operator));
             },

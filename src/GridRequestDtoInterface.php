@@ -13,7 +13,7 @@ interface GridRequestDtoInterface
     /**
      * @param bool $withAdditional
      *
-     * @return array
+     * @return mixed[]
      */
     public function getFilter(bool $withAdditional = TRUE): array;
 
@@ -33,7 +33,7 @@ interface GridRequestDtoInterface
     public function getItemsPerPage(): int;
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getOrderBy(): array;
 

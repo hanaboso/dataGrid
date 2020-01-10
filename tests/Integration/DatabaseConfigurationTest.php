@@ -16,6 +16,8 @@ use Exception;
 final class DatabaseConfigurationTest extends TestCaseAbstract
 {
 
+    protected const DATABASE = 'datagrid1';
+
     /**
      * @throws Exception
      */

@@ -46,52 +46,48 @@ abstract class GridFilterAbstract
     /**
      * @var EntityManager
      */
-    protected $em;
+    protected EntityManager $em;
 
     /**
      * @var string
+     * @phpstan-var class-string
      */
-    protected $entity;
+    protected string $entity;
 
     /**
      * @var QueryBuilder
      */
-    protected $searchQuery;
+    protected QueryBuilder $searchQuery;
 
     /**
      * @var QueryBuilder|NULL
      */
-    protected $countQuery = NULL;
+    private ?QueryBuilder $countQuery = NULL;
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $filters;
+    private array $filterCols = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $filterCols = [];
+    private array $orderCols = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $orderCols = [];
+    private array $searchableCols = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $searchableCols = [];
-
-    /**
-     * @var array
-     */
-    protected $filterColsCallbacks = [];
+    private array $filterColsCallbacks = [];
 
     /**
      * @var bool
      */
-    protected $fetchJoin = TRUE;
+    private bool $fetchJoin = TRUE;
 
     /**
      * GridFilterAbstract constructor.
@@ -102,16 +98,21 @@ abstract class GridFilterAbstract
     {
         $this->em = $em;
         $this->setEntity();
-        $this->configFilterColsCallbacks();
-        $this->configCustomCountQuery();
-        $this->prepareSearchQuery();
+
+        $this->countQuery          = $this->configCustomCountQuery();
+        $this->filterCols          = $this->filterCols();
+        $this->filterColsCallbacks = $this->configFilterColsCallbacks();
+        $this->orderCols           = $this->orderCols();
+        $this->searchableCols      = $this->searchableCols();
+        $this->searchQuery         = $this->prepareSearchQuery();
+        $this->fetchJoin           = $this->useFetchJoin();
     }
 
     /**
      * @param GridRequestDtoInterface $gridRequestDto
-     * @param array                   $dateFields
+     * @param mixed[]                 $dateFields
      *
-     * @return array
+     * @return mixed[]
      * @throws GridException
      */
     public function getData(GridRequestDtoInterface $gridRequestDto, array $dateFields = []): array
@@ -148,7 +149,7 @@ abstract class GridFilterAbstract
     }
 
     /**
-     * @return EntityRepository|ObjectRepository
+     * @return EntityRepository<mixed>&ObjectRepository
      */
     public function getRepository(): ObjectRepository
     {
@@ -232,6 +233,7 @@ abstract class GridFilterAbstract
                         $expression,
                         $orCondition[self::OPERATOR]
                     );
+
                     continue;
                 }
 
@@ -259,7 +261,7 @@ abstract class GridFilterAbstract
         if ($search) {
             $searchExpression = $builder->expr()->orX();
 
-            if (!$this->searchableCols) {
+            if (empty($this->searchableCols)) {
                 throw new GridException(
                     sprintf(
                         "Column cannot be used for searching! Have you forgotten add it to '%s::searchableCols'?",
@@ -280,10 +282,9 @@ abstract class GridFilterAbstract
                         GridException::SEARCH_COLS_ERROR
                     );
                 }
-                $column = $this->filterCols[$column];
 
                 if (isset($this->filterColsCallbacks[$column])) {
-                    $expression = $builder->expr();
+                    $expression = $builder->expr()->orX();
 
                     $this->filterColsCallbacks[$column](
                         $this->searchQuery,
@@ -292,10 +293,11 @@ abstract class GridFilterAbstract
                         $expression,
                         NULL
                     );
-
                     $searchExpression->add($expression);
+
                     continue;
                 }
+                $column = $this->filterCols[$column];
 
                 $searchExpression->add(self::getCondition($builder, $column, $search, self::LIKE));
             }
@@ -339,12 +341,32 @@ abstract class GridFilterAbstract
     /**
      *
      */
-    abstract protected function prepareSearchQuery(): void;
+    abstract protected function prepareSearchQuery(): QueryBuilder;
 
     /**
      *
      */
     abstract protected function setEntity(): void;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function filterCols(): array;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function orderCols(): array;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function searchableCols(): array;
+
+    /**
+     * @return bool
+     */
+    abstract protected function useFetchJoin(): bool;
 
     /**
      * -------------------------------------------- HELPERS -----------------------------------------------
@@ -353,23 +375,24 @@ abstract class GridFilterAbstract
     /**
      * In child can configure GridFilterAbstract::filterColsCallbacks
      * example child content
-     * $this->filterColsCallbacks[ESomeEnumCols::CREATED_AT_FROM] = [$object,'applyCreatedAtFrom']
      *
-     * function applySomeFilter(QueryBuilder $qb,$filterVal,$colName){}
+     * return [ESomeEnumCols::CREATED_AT_FROM => function (Builder $builder,string $value,string $name,Expr $expr,?string $operator){}]
+     *
+     * @return mixed[]
      */
-    protected function configFilterColsCallbacks(): void
+    protected function configFilterColsCallbacks(): array
     {
-
+        return [];
     }
 
     /**
      * In child can configure GridFilterAbstract::configCustomCountQuery
      * example child content
-     * $this->countQuery = $this->getRepository()->createQueryBuilder('c')->select('count(c.id)')
+     * return $this->getRepository()->createQueryBuilder('c')->select('count(c.id)')
      */
-    protected function configCustomCountQuery(): void
+    protected function configCustomCountQuery(): ?QueryBuilder
     {
-
+        return NULL;
     }
 
     /**

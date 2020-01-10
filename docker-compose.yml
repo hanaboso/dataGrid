@@ -1,16 +1,20 @@
-version: '3.3'
+version: '3.5'
 
 services:
     php:
-        image: hanabosocom/php-dev:php-7.3
+        image: hanabosocom/php-dev:php-7.4
         user: ${DEV_UID}:${DEV_GID}
         environment:
             DEV_UID: ${DEV_UID}
             DEV_GID: ${DEV_GID}
+            COMPOSER_HOME: ${HOME}/dev/.composer
+            MARIA_HOST: 'mariadb'
+            MARIA_USER: 'root'
+            MARIA_PASSWORD: 'root'
         volumes:
             - ./:/var/www
             - ${SSH_AUTH_SOCK}:${SSH_AUTH}
-            - ${HOME}/.composer:/srv/.composer
+            - ${HOME}/dev/.composer:${HOME}/dev/.composer
 
     mariadb:
         image: mariadb:latest

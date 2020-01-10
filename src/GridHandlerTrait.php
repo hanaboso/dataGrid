@@ -12,9 +12,9 @@ trait GridHandlerTrait
 
     /**
      * @param GridRequestDtoInterface $dto
-     * @param array                   $items
+     * @param mixed[]                 $items
      *
-     * @return array
+     * @return mixed[]
      */
     protected function getGridResponse(GridRequestDtoInterface $dto, array $items): array
     {

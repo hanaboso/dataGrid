@@ -25,9 +25,9 @@ abstract class TestCaseAbstract extends TestCase
 
     use PrivateTrait;
 
-    private const TEMP_DIR = '%s/../temp/Doctrine2.ORM';
-    private const HOSTNAME = 'mariadb';
-    private const DATABASE = 'datagrid';
+    private const   TEMP_DIR = '%s/../var/Doctrine2.ORM';
+
+    protected const DATABASE = 'datagrid';
 
     /**
      * @var EntityManager
@@ -58,10 +58,10 @@ abstract class TestCaseAbstract extends TestCase
         $this->em = EntityManager::create(
             [
                 'driver'   => 'pdo_mysql',
-                'host'     => self::HOSTNAME,
-                'user'     => 'root',
-                'password' => 'root',
-                'dbname'   => self::DATABASE,
+                'host'     => getenv('MARIA_HOST') ?: '127.0.0.1',
+                'user'     => getenv('MARIA_USER') ?: 'travis',
+                'password' => getenv('MARIA_USER') ?: '',
+                'dbname'   => static::DATABASE,
             ],
             $configuration
         );

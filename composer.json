@@ -1,6 +1,7 @@
 {
     "name": "hanaboso/data-grid",
     "license": "proprietary",
+    "version": "2.1.0",
     "description": "Data grid",
     "autoload": {
         "psr-4": {
@@ -13,12 +14,13 @@
         }
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-json": "*",
         "beberlei/doctrineextensions": "^1.2",
-        "doctrine/orm": "^2.7"
+        "doctrine/orm": "^2.7",
+        "hanaboso/utils": "^1.0"
     },
     "require-dev": {
-        "hanaboso/php-check-utils": "^1.0"
+        "hanaboso/php-check-utils": "^1.1"
     }
 }
