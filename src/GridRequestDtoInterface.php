@@ -23,7 +23,7 @@ interface GridRequestDtoInterface
     public function getPage(): int;
 
     /**
-     * @return string|null
+     * @return string|NULL
      */
     public function getSearch(): ?string;
 

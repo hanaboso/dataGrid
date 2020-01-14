@@ -57,7 +57,7 @@ abstract class GridFilterAbstract
     /**
      * @var QueryBuilder
      */
-    protected QueryBuilder $searchQuery;
+    private QueryBuilder $searchQuery;
 
     /**
      * @var QueryBuilder|NULL

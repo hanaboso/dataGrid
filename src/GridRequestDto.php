@@ -149,7 +149,7 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return null|string
+     * @return string|NULL
      */
     private function getOrderByForHeader(): ?string
     {
@@ -242,7 +242,7 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return string|null
+     * @return string|NULL
      */
     public function getSearch(): ?string
     {

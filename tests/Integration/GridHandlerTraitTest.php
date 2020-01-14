@@ -30,4 +30,3 @@ final class GridHandlerTraitTest extends TestCaseAbstract
     }
 
 }
-

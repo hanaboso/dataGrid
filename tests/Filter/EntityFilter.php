@@ -79,7 +79,7 @@ final class EntityFilter extends GridFilterAbstract
     }
 
     /**
-     * @return QueryBuilder|null
+     * @return QueryBuilder|NULL
      */
     protected function configCustomCountQuery(): ?QueryBuilder
     {
@@ -99,7 +99,13 @@ final class EntityFilter extends GridFilterAbstract
         parent::configFilterColsCallbacks();
 
         return [
-            'custom_string' => function (QueryBuilder $qb, $value, $name, Composite $c, ?string $operator): void {
+            'custom_string' => static function (
+                QueryBuilder $qb,
+                $value,
+                $name,
+                Composite $c,
+                ?string $operator
+            ): void {
                 $c->add(GridFilterAbstract::getCondition($qb, $name, $value, $operator));
             },
         ];
