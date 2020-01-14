@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c75be27c0e47e358097e364d003cc642",
+    "content-hash": "65d3e297c520fd55e2cb54f3199a58b4",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -962,16 +962,16 @@
         },
         {
             "name": "hanaboso/utils",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hanaboso/utils.git",
-                "reference": "e15f974ccab8cd2d3a03e99faeb8860b9c736fce"
+                "reference": "ec87b4918e05e601d6aa74d8110b8d5dda5c003c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hanaboso/utils/zipball/e15f974ccab8cd2d3a03e99faeb8860b9c736fce",
-                "reference": "e15f974ccab8cd2d3a03e99faeb8860b9c736fce",
+                "url": "https://api.github.com/repos/hanaboso/utils/zipball/ec87b4918e05e601d6aa74d8110b8d5dda5c003c",
+                "reference": "ec87b4918e05e601d6aa74d8110b8d5dda5c003c",
                 "shasum": ""
             },
             "require": {
@@ -1011,7 +1011,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2020-01-14T08:53:03+00:00"
+            "time": "2020-01-14T12:09:32+00:00"
         },
         {
             "name": "psr/container",

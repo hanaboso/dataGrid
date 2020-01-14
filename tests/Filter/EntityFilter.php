@@ -64,6 +64,8 @@ final class EntityFilter extends GridFilterAbstract
      */
     protected function useFetchJoin(): bool
     {
+        parent::useFetchJoin();
+
         return TRUE;
     }
 

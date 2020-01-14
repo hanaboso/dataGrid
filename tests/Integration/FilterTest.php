@@ -2542,4 +2542,47 @@ final class FilterTest extends TestCaseAbstract
         );
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testGetDataMissingCountQuery(): void
+    {
+        $f = $this->getMockBuilder(EntityFilter::class)
+            ->setMethods(['configCustomCountQuery'])
+            ->setConstructorArgs([$this->em])
+            ->getMock();
+        $f->method('configCustomCountQuery')->willReturn(NULL);
+        $this->setProperty($f, 'em', $this->em);
+
+        $result = $f->getData(
+            new GridRequestDto(
+                [
+                    self::FILTER => [
+                        [
+                            [
+                                'column'   => 'string',
+                                'value'    => 'ing 1',
+                                'operator' => 'ENDS',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            ['date']
+        );
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 1',
+                    'int'    => 1,
+                    'float'  => 1.1,
+                    'bool'   => FALSE,
+                    'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+    }
+
 }

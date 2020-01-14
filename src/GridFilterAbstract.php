@@ -99,12 +99,10 @@ abstract class GridFilterAbstract
         $this->em = $em;
         $this->setEntity();
 
-        $this->countQuery          = $this->configCustomCountQuery();
         $this->filterCols          = $this->filterCols();
-        $this->filterColsCallbacks = $this->configFilterColsCallbacks();
         $this->orderCols           = $this->orderCols();
         $this->searchableCols      = $this->searchableCols();
-        $this->searchQuery         = $this->prepareSearchQuery();
+        $this->filterColsCallbacks = $this->configFilterColsCallbacks();
         $this->fetchJoin           = $this->useFetchJoin();
     }
 
@@ -117,7 +115,8 @@ abstract class GridFilterAbstract
      */
     public function getData(GridRequestDtoInterface $gridRequestDto, array $dateFields = []): array
     {
-        $this->prepareSearchQuery();
+        $this->searchQuery = $this->prepareSearchQuery();
+        $this->countQuery  = $this->configCustomCountQuery();
         $this->processSortations($gridRequestDto);
         $this->processConditions($gridRequestDto, $this->searchQuery);
 
@@ -193,8 +192,8 @@ abstract class GridFilterAbstract
      */
     private function processConditions(GridRequestDtoInterface $dto, QueryBuilder $builder): void
     {
-        $conditions                  = $dto->getFilter();
-        $advancedConditionExpression = $builder->expr()->andX();
+        $conditions          = $dto->getFilter();
+        $conditionExpression = $builder->expr()->andX();
 
         $exp = FALSE;
         foreach ($conditions as $andCondition) {
@@ -248,13 +247,13 @@ abstract class GridFilterAbstract
             }
 
             if ($hasExpression) {
-                $advancedConditionExpression = $advancedConditionExpression->add($expression);
-                $exp                         = TRUE;
+                $conditionExpression = $conditionExpression->add($expression);
+                $exp                 = TRUE;
             }
         }
 
         if ($exp) {
-            $builder->andWhere($advancedConditionExpression);
+            $builder->andWhere($conditionExpression);
         }
 
         $search = $dto->getSearch();
@@ -364,13 +363,18 @@ abstract class GridFilterAbstract
     abstract protected function searchableCols(): array;
 
     /**
-     * @return bool
-     */
-    abstract protected function useFetchJoin(): bool;
-
-    /**
      * -------------------------------------------- HELPERS -----------------------------------------------
      */
+
+    /**
+     * Whether the query joins a collection (true by default).
+     *
+     * @return bool
+     */
+    protected function useFetchJoin(): bool
+    {
+        return TRUE;
+    }
 
     /**
      * In child can configure GridFilterAbstract::filterColsCallbacks
