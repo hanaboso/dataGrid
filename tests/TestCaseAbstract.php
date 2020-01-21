@@ -25,9 +25,9 @@ abstract class TestCaseAbstract extends TestCase
 
     use PrivateTrait;
 
-    private const   TEMP_DIR = '%s/../var/Doctrine2.ORM';
-
     protected const DATABASE = 'datagrid';
+
+    private const   TEMP_DIR = '%s/../var/Doctrine2.ORM';
 
     /**
      * @var EntityManager

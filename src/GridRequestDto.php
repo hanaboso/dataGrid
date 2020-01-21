@@ -149,18 +149,6 @@ class GridRequestDto implements GridRequestDtoInterface
     }
 
     /**
-     * @return string|NULL
-     */
-    private function getOrderByForHeader(): ?string
-    {
-        if (array_key_exists(self::SORTER, $this->headers)) {
-            return Json::encode($this->headers[self::SORTER]);
-        }
-
-        return NULL;
-    }
-
-    /**
      * @return mixed[]
      * @throws GridException
      */
@@ -189,7 +177,8 @@ class GridRequestDto implements GridRequestDtoInterface
 
             if (!in_array(
                 $item[GridFilterAbstract::DIRECTION],
-                [GridFilterAbstract::ASCENDING, GridFilterAbstract::DESCENDING,]
+                [GridFilterAbstract::ASCENDING, GridFilterAbstract::DESCENDING,],
+                TRUE
             )) {
                 throw new GridException(
                     sprintf(
@@ -257,6 +246,18 @@ class GridRequestDto implements GridRequestDtoInterface
     protected function formatFilterForHeader(array $data): string
     {
         return Json::encode($data);
+    }
+
+    /**
+     * @return string|NULL
+     */
+    private function getOrderByForHeader(): ?string
+    {
+        if (array_key_exists(self::SORTER, $this->headers)) {
+            return Json::encode($this->headers[self::SORTER]);
+        }
+
+        return NULL;
     }
 
 }

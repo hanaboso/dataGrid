@@ -20,43 +20,19 @@ use LogicException;
 final class FilterTest extends TestCaseAbstract
 {
 
-    private const DATETIME = 'Y-m-d H:i:s';
+    protected const PAGING = 'paging';
 
+    private const DATETIME       = 'Y-m-d H:i:s';
     private const SORTER         = 'sorter';
     private const FILTER         = 'filter';
     private const PAGE           = 'page';
     private const SEARCH         = 'search';
     private const ITEMS_PER_PAGE = 'itemsPerPage';
 
-    protected const PAGING = 'paging';
-
     /**
      * @var DateTime
      */
     private $today;
-
-    /**
-     * @throws Exception
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->today = new DateTime('today', new DateTimeZone('UTC'));
-
-        for ($i = 0; $i < 10; $i++) {
-            $this->em->persist(
-                (new Entity())
-                    ->setString(sprintf('String %s', $i))
-                    ->setInt($i)
-                    ->setFloat((float) sprintf('%s.%s', $i, $i))
-                    ->setBool($i % 2 === 0)
-                    ->setDate(new DateTime(sprintf('today +%s day', $i), new DateTimeZone('UTC')))
-            );
-        }
-
-        $this->em->flush();
-    }
 
     /**
      * @throws Exception
@@ -1242,8 +1218,8 @@ final class FilterTest extends TestCaseAbstract
             );
             self::assertEquals(TRUE, FALSE);
         } catch (GridException $e) {
-            $this->assertEquals(GridException::SORT_COLS_ERROR, $e->getCode());
-            $this->assertEquals(
+            self::assertEquals(GridException::SORT_COLS_ERROR, $e->getCode());
+            self::assertEquals(
                 "Column 'Unknown' cannot be used for sorting! Have you forgotten add it to 'DataGridTests\Filter\EntityFilter::orderCols'?",
                 $e->getMessage()
             );
@@ -2583,6 +2559,29 @@ final class FilterTest extends TestCaseAbstract
             ],
             $result
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->today = new DateTime('today', new DateTimeZone('UTC'));
+
+        for ($i = 0; $i < 10; $i++) {
+            $this->em->persist(
+                (new Entity())
+                    ->setString(sprintf('String %s', $i))
+                    ->setInt($i)
+                    ->setFloat((float) sprintf('%s.%s', $i, $i))
+                    ->setBool($i % 2 === 0)
+                    ->setDate(new DateTime(sprintf('today +%s day', $i), new DateTimeZone('UTC')))
+            );
+        }
+
+        $this->em->flush();
     }
 
 }

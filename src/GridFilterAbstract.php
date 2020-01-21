@@ -90,6 +90,31 @@ abstract class GridFilterAbstract
     private bool $fetchJoin = TRUE;
 
     /**
+     *
+     */
+    abstract protected function prepareSearchQuery(): QueryBuilder;
+
+    /**
+     *
+     */
+    abstract protected function setEntity(): void;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function filterCols(): array;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function orderCols(): array;
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function searchableCols(): array;
+
+    /**
      * GridFilterAbstract constructor.
      *
      * @param EntityManager $em
@@ -153,6 +178,151 @@ abstract class GridFilterAbstract
     public function getRepository(): ObjectRepository
     {
         return $this->em->getRepository($this->entity);
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @param string       $name
+     * @param mixed        $value
+     * @param string|NULL  $operator
+     *
+     * @return mixed
+     */
+    public static function getCondition(QueryBuilder $builder, string $name, $value, ?string $operator = NULL)
+    {
+        switch ($operator) {
+            case self::EQ:
+                if (is_array($value)) {
+                    return count($value) > 1
+                        ? $builder->expr()->in($name, self::getValue($value))
+                        : $builder->expr()->eq($name, self::getValue($value[0]));
+                } else {
+                    return $builder->expr()->eq($name, self::getValue($value));
+                }
+            case self::NEQ:
+                return $builder->expr()->notIn(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::GTE:
+                return $builder->expr()->gte(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::GT:
+                return $builder->expr()->gt(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::LTE:
+                return $builder->expr()->lte(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::LT:
+                return $builder->expr()->lt(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::NEMPTY:
+                return $builder->expr()->isNotNull($name);
+            case self::EMPTY:
+                return $builder->expr()->isNull($name);
+            case self::LIKE:
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%%%s%%'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::STARTS:
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%s%%'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::ENDS:
+                return $builder->expr()->like(
+                    $name,
+                    sprintf(
+                        "'%%%s'",
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+            case self::BETWEEN:
+                if (is_array($value) && count($value) >= 2) {
+                    return $builder->expr()->between($name, self::getValue($value[0]), self::getValue($value[1]));
+                }
+
+                return $builder->expr()->eq($name, self::getValue($value));
+            case self::NBETWEEN:
+                if (is_array($value) && count($value) >= 2) {
+                    return $builder->expr()
+                        ->orX(
+                            $builder->expr()->lte($name, self::getValue($value[0])),
+                            $builder->expr()->gte($name, self::getValue($value[1]))
+                        );
+                }
+
+                return $builder->expr()->neq($name, self::getValue($value));
+            default:
+                return $builder->expr()->eq(
+                    $name,
+                    self::getValue(
+                        is_array($value) ? $value[0] : $value
+                    )
+                );
+        }
+    }
+
+    /**
+     * -------------------------------------------- HELPERS -----------------------------------------------
+     */
+
+    /**
+     * Whether the query joins a collection (true by default).
+     *
+     * @return bool
+     */
+    protected function useFetchJoin(): bool
+    {
+        return TRUE;
+    }
+
+    /**
+     * In child can configure GridFilterAbstract::filterColsCallbacks
+     * example child content
+     *
+     * return [ESomeEnumCols::CREATED_AT_FROM => function (Builder $builder,string $value,string $name,Expr $expr,?string $operator){}]
+     *
+     * @return mixed[]
+     */
+    protected function configFilterColsCallbacks(): array
+    {
+        return [];
+    }
+
+    /**
+     * In child can configure GridFilterAbstract::configCustomCountQuery
+     * example child content
+     * return $this->getRepository()->createQueryBuilder('c')->select('count(c.id)')
+     */
+    protected function configCustomCountQuery(): ?QueryBuilder
+    {
+        return NULL;
     }
 
     /**
@@ -334,176 +504,6 @@ abstract class GridFilterAbstract
                 ),
                 GridException::FILTER_COLS_ERROR
             );
-        }
-    }
-
-    /**
-     *
-     */
-    abstract protected function prepareSearchQuery(): QueryBuilder;
-
-    /**
-     *
-     */
-    abstract protected function setEntity(): void;
-
-    /**
-     * @return mixed[]
-     */
-    abstract protected function filterCols(): array;
-
-    /**
-     * @return mixed[]
-     */
-    abstract protected function orderCols(): array;
-
-    /**
-     * @return mixed[]
-     */
-    abstract protected function searchableCols(): array;
-
-    /**
-     * -------------------------------------------- HELPERS -----------------------------------------------
-     */
-
-    /**
-     * Whether the query joins a collection (true by default).
-     *
-     * @return bool
-     */
-    protected function useFetchJoin(): bool
-    {
-        return TRUE;
-    }
-
-    /**
-     * In child can configure GridFilterAbstract::filterColsCallbacks
-     * example child content
-     *
-     * return [ESomeEnumCols::CREATED_AT_FROM => function (Builder $builder,string $value,string $name,Expr $expr,?string $operator){}]
-     *
-     * @return mixed[]
-     */
-    protected function configFilterColsCallbacks(): array
-    {
-        return [];
-    }
-
-    /**
-     * In child can configure GridFilterAbstract::configCustomCountQuery
-     * example child content
-     * return $this->getRepository()->createQueryBuilder('c')->select('count(c.id)')
-     */
-    protected function configCustomCountQuery(): ?QueryBuilder
-    {
-        return NULL;
-    }
-
-    /**
-     * @param QueryBuilder $builder
-     * @param string       $name
-     * @param mixed        $value
-     * @param string|NULL  $operator
-     *
-     * @return mixed
-     */
-    public static function getCondition(QueryBuilder $builder, string $name, $value, ?string $operator = NULL)
-    {
-        switch ($operator) {
-            case self::EQ:
-                if (is_array($value)) {
-                    return count($value) > 1
-                        ? $builder->expr()->in($name, self::getValue($value))
-                        : $builder->expr()->eq($name, self::getValue($value[0]));
-                } else {
-                    return $builder->expr()->eq($name, self::getValue($value));
-                }
-            case self::NEQ:
-                return $builder->expr()->notIn(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::GTE:
-                return $builder->expr()->gte(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::GT:
-                return $builder->expr()->gt(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::LTE:
-                return $builder->expr()->lte(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::LT:
-                return $builder->expr()->lt(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::NEMPTY:
-                return $builder->expr()->isNotNull($name);
-            case self::EMPTY:
-                return $builder->expr()->isNull($name);
-            case self::LIKE:
-                return $builder->expr()->like(
-                    $name,
-                    sprintf(
-                        "'%%%s%%'",
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::STARTS:
-                return $builder->expr()->like(
-                    $name,
-                    sprintf(
-                        "'%s%%'",
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::ENDS:
-                return $builder->expr()->like(
-                    $name,
-                    sprintf(
-                        "'%%%s'",
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
-            case self::BETWEEN:
-                if (is_array($value) && count($value) >= 2) {
-                    return $builder->expr()->between($name, self::getValue($value[0]), self::getValue($value[1]));
-                }
-
-                return $builder->expr()->eq($name, self::getValue($value));
-            case self::NBETWEEN:
-                if (is_array($value) && count($value) >= 2) {
-                    return $builder->expr()
-                        ->orX(
-                            $builder->expr()->lte($name, self::getValue($value[0])),
-                            $builder->expr()->gte($name, self::getValue($value[1]))
-                        );
-                }
-
-                return $builder->expr()->neq($name, self::getValue($value));
-            default:
-                return $builder->expr()->eq(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
         }
     }
 
