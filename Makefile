@@ -1,4 +1,4 @@
-.PHONY: init-dev
+.PHONY: init-dev test
 
 DC=docker-compose
 DE=docker-compose exec -T php
@@ -43,21 +43,21 @@ database-create:
 	$(DM) bin/bash -c 'mysql -uroot -proot <<< "CREATE DATABASE datagrid1;"'
 	$(DM) bin/bash -c 'mysql -uroot -proot <<< "CREATE DATABASE datagrid2;"'
 
-codesniffer:
-	$(DE) ./vendor/bin/phpcs --standard=./ruleset.xml --colors -p src/ tests/
+phpcodesniffer:
+	$(DE) ./vendor/bin/phpcs --standard=./ruleset.xml src tests
 
 phpstan:
-	$(DE) ./vendor/bin/phpstan analyse -c ./phpstan.neon -l 8 src/ tests/
+	$(DE) ./vendor/bin/phpstan analyse -c ./phpstan.neon -l 8 src tests
 
 phpintegration: database-create
 	$(DE) ./vendor/bin/phpunit  -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist tests/Integration
 
 phpcoverage:
-	$(DE) php vendor/bin/paratest -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist -p 4 --coverage-html var/coverage --whitelist src tests
+	$(DE) ./vendor/bin/paratest -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist -p 4 --coverage-html var/coverage --whitelist src tests
 
 phpcoverage-ci:
 	$(DE) ./vendor/hanaboso/php-check-utils/bin/coverage.sh
 
 test: docker-up-force composer-install fasttest
 
-fasttest: clear-cache codesniffer phpstan phpintegration phpcoverage-ci
+fasttest: clear-cache phpcodesniffer phpstan phpintegration phpcoverage-ci

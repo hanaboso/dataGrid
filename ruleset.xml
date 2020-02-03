@@ -3,7 +3,10 @@
     <rule ref="./vendor/hanaboso/php-check-utils/ruleset.xml"/>
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
-            <property name="rootNamespaces" type="array" value="src=>Hanaboso\DataGrid, tests=>DataGridTests"/>
+            <property name="rootNamespaces" type="array">
+                <element key="src" value="Hanaboso\DataGrid"/>
+                <element key="tests" value="DataGridTests"/>
+            </property>
         </properties>
     </rule>
 </ruleset>
