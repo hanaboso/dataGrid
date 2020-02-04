@@ -36,6 +36,7 @@ clear-cache:
 init-dev: docker-up-force composer-install
 
 database-create:
+	$(DM) bin/bash -c 'while ! mysql -uroot -proot <<< "DROP DATABASE IF EXISTS datagrid;" > /dev/null 2>&1; do sleep 1; done'
 	$(DM) bin/bash -c 'mysql -uroot -proot <<< "DROP DATABASE IF EXISTS datagrid;"'
 	$(DM) bin/bash -c 'mysql -uroot -proot <<< "DROP DATABASE IF EXISTS datagrid1;"'
 	$(DM) bin/bash -c 'mysql -uroot -proot <<< "DROP DATABASE IF EXISTS datagrid2;"'
