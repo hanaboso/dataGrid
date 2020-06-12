@@ -22,6 +22,8 @@ abstract class GridFilterAbstract
 
     public const EQ       = 'EQ';
     public const NEQ      = 'NEQ';
+    public const IN       = 'IN';
+    public const NIN      = 'NIN';
     public const GT       = 'GT';
     public const LT       = 'LT';
     public const GTE      = 'GTE';
@@ -167,7 +169,7 @@ abstract class GridFilterAbstract
         /** @var QueryBuilder $query */
         $query = $this->countQuery;
 
-        return (int) (new Paginator($query, $this->fetchJoin))
+        return (new Paginator($query, $this->fetchJoin))
             ->setUseOutputWalkers(FALSE)
             ->count();
     }
@@ -193,19 +195,16 @@ abstract class GridFilterAbstract
         switch ($operator) {
             case self::EQ:
                 if (is_array($value)) {
-                    return count($value) > 1
-                        ? $builder->expr()->in($name, self::getValue($value))
-                        : $builder->expr()->eq($name, self::getValue($value[0]));
+                    return $builder->expr()->eq($name, self::getValue($value[0]));
                 } else {
                     return $builder->expr()->eq($name, self::getValue($value));
                 }
+            case self::IN:
+                return $builder->expr()->in($name, self::getValue($value));
+            case self::NIN:
+                return $builder->expr()->notIn($name, self::getValue($value));
             case self::NEQ:
-                return $builder->expr()->notIn(
-                    $name,
-                    self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
-                );
+                return $builder->expr()->notIn($name, self::getValue(is_array($value) ? $value[0] : $value));
             case self::GTE:
                 return $builder->expr()->gte(
                     $name,

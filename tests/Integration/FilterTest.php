@@ -1394,7 +1394,7 @@ final class FilterTest extends TestCaseAbstract
                     [
                         [
                             'column'   => 'int',
-                            'value'    => [6, 7, 8],
+                            'value'    => [6, 7],
                             'operator' => 'EQ',
                         ],
                     ],
@@ -1411,6 +1411,45 @@ final class FilterTest extends TestCaseAbstract
                     'float'  => 6.6,
                     'bool'   => TRUE,
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+        self::assertEquals(
+            [
+                'filter'       => '[[{"column":"int","value":[6,7],"operator":"EQ"}]]',
+                'page'         => 1,
+                'search'       => NULL,
+                'itemsPerPage' => 10,
+                'total'        => 1,
+                'sorter'       => NULL,
+            ],
+            $dto->getParamsForHeader()
+        );
+
+        $dto    = new GridRequestDto(
+            [
+                self::FILTER => [
+                    [
+                        [
+                            'column'   => 'int',
+                            'value'    => [6, 7, 8],
+                            'operator' => 'IN',
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 6',
+                    'int'    => 6,
+                    'float'  => 6.6,
+                    'bool'   => TRUE,
+                    'date'   => $this->today->format(self::DATETIME),
                 ], [
                     'id'     => $result[1]['id'],
                     'string' => 'String 7',
@@ -1431,11 +1470,50 @@ final class FilterTest extends TestCaseAbstract
         );
         self::assertEquals(
             [
-                'filter'       => '[[{"column":"int","value":[6,7,8],"operator":"EQ"}]]',
+                'filter'       => '[[{"column":"int","value":[6,7,8],"operator":"IN"}]]',
                 'page'         => 1,
                 'search'       => NULL,
                 'itemsPerPage' => 10,
                 'total'        => 3,
+                'sorter'       => NULL,
+            ],
+            $dto->getParamsForHeader()
+        );
+
+        $dto    = new GridRequestDto(
+            [
+                self::FILTER => [
+                    [
+                        [
+                            'column'   => 'int',
+                            'value'    => [0, 1, 2, 3, 4, 5, 6, 7, 9],
+                            'operator' => 'NIN',
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $result = (new EntityFilter($this->em))->getData($dto, ['date']);
+        self::assertEquals(
+            [
+                [
+                    'id'     => $result[0]['id'],
+                    'string' => 'String 8',
+                    'int'    => 8,
+                    'float'  => 8.8,
+                    'bool'   => TRUE,
+                    'date'   => $this->today->format(self::DATETIME),
+                ],
+            ],
+            $result
+        );
+        self::assertEquals(
+            [
+                'filter'       => '[[{"column":"int","value":[0,1,2,3,4,5,6,7,9],"operator":"NIN"}]]',
+                'page'         => 1,
+                'search'       => NULL,
+                'itemsPerPage' => 10,
+                'total'        => 1,
                 'sorter'       => NULL,
             ],
             $dto->getParamsForHeader()
