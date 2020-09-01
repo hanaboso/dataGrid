@@ -4,12 +4,12 @@ namespace DataGridTests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use Exception;
 use Hanaboso\PhpCheckUtils\PhpUnit\Traits\PrivateTrait;

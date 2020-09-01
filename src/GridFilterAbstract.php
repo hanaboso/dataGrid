@@ -2,12 +2,12 @@
 
 namespace Hanaboso\DataGrid;
 
-use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ObjectRepository;
 use Hanaboso\DataGrid\Exception\GridException;
 use Hanaboso\DataGrid\Result\ResultData;
 use LogicException;

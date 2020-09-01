@@ -1,5 +1,11 @@
 includes:
-    - vendor/hanaboso/php-check-utils/phpstan.neon
+	- vendor/hanaboso/php-check-utils/phpstan.neon
 
 parameters:
-    ignoreErrors:
+	ignoreErrors:
+	ergebnis:
+			classesAllowedToBeExtended:
+				- DataGridTests\TestCaseAbstract
+				- Hanaboso\DataGrid\GridFilterAbstract
+			classesNotRequiredToBeAbstractOrFinal:
+				- Hanaboso\DataGrid\GridRequestDto
