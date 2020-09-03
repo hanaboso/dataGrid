@@ -1,8 +1,8 @@
 {
     "name": "hanaboso/data-grid",
     "description": "Data grid",
-    "version": "2.1.8",
-    "license": "proprietary",
+    "version": "2.1.9",
+    "license": "Apache-2.0",
     "require": {
         "php": "^7.4",
         "ext-ctype": "*",

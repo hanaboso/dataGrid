@@ -12,9 +12,9 @@ services:
             MARIA_USER: 'root'
             MARIA_PASSWORD: 'root'
         volumes:
-            - ./:/var/www
-            - ${SSH_AUTH_SOCK}:${SSH_AUTH}
-            - ${HOME}/dev/.composer:${HOME}/dev/.composer
+            - ./:/var/www:cached
+            - ${SSH_AUTH}:/tmp/.ssh-auth-sock
+            - ${HOME}/dev/.composer:${HOME}/dev/.composer:cached
 
     mariadb:
         image: mariadb:latest
