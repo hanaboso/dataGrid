@@ -3,6 +3,9 @@ includes:
 
 parameters:
 	ignoreErrors:
+		-
+			message: '#Parameter \#1 \$classes of method #'
+			path: tests/TestCaseAbstract.php
 	ergebnis:
 			classesAllowedToBeExtended:
 				- DataGridTests\TestCaseAbstract

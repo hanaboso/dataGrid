@@ -32,7 +32,7 @@ abstract class TestCaseAbstract extends TestCase
     /**
      * @var EntityManager
      */
-    protected $em;
+    protected EntityManager $em;
 
     /**
      * @throws Exception

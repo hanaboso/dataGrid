@@ -22,42 +22,42 @@ final class Entity
      * @ORM\Column(type="integer", options={"unsigned":true})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", name="`string`")
      */
-    private $string;
+    private string $string;
 
     /**
      * @var integer
      *
      * @ORM\Column(type="integer", name="`int`")
      */
-    private $int;
+    private int $int;
 
     /**
      * @var float
      *
      * @ORM\Column(type="float", name="`float`")
      */
-    private $float;
+    private float $float;
 
     /**
      * @var bool
      *
      * @ORM\Column(type="boolean", name="`bool`")
      */
-    private $bool;
+    private bool $bool;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(type="date", name="`date`")
      */
-    private $date;
+    private DateTime $date;
 
     /**
      * @return int

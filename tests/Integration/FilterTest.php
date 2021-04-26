@@ -32,7 +32,7 @@ final class FilterTest extends TestCaseAbstract
     /**
      * @var DateTime
      */
-    private $today;
+    private DateTime $today;
 
     /**
      * @throws Exception

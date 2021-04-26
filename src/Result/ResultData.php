@@ -18,11 +18,6 @@ final class ResultData
     private const DATE_TIME = 'Y-m-d H:i:s';
 
     /**
-     * @var Query
-     */
-    private Query $query;
-
-    /**
      * @var bool
      */
     private bool $fetchJoinCollection = TRUE;
@@ -32,9 +27,8 @@ final class ResultData
      *
      * @param Query $query
      */
-    public function __construct(Query $query)
+    public function __construct(private Query $query)
     {
-        $this->query = $query;
     }
 
     /**

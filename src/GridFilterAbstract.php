@@ -46,11 +46,6 @@ abstract class GridFilterAbstract
     public const SEARCH    = 'search';
 
     /**
-     * @var EntityManager
-     */
-    protected EntityManager $em;
-
-    /**
      * @var string
      * @phpstan-var class-string
      */
@@ -69,27 +64,27 @@ abstract class GridFilterAbstract
     /**
      * @var mixed[]
      */
-    private array $filterCols = [];
+    private array $filterCols;
 
     /**
      * @var mixed[]
      */
-    private array $orderCols = [];
+    private array $orderCols;
 
     /**
      * @var mixed[]
      */
-    private array $searchableCols = [];
+    private array $searchableCols;
 
     /**
      * @var mixed[]
      */
-    private array $filterColsCallbacks = [];
+    private array $filterColsCallbacks;
 
     /**
      * @var bool
      */
-    private bool $fetchJoin = TRUE;
+    private bool $fetchJoin;
 
     /**
      *
@@ -121,9 +116,8 @@ abstract class GridFilterAbstract
      *
      * @param EntityManager $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(protected EntityManager $em)
     {
-        $this->em = $em;
         $this->setEntity();
 
         $this->filterCols          = $this->filterCols();
@@ -190,7 +184,12 @@ abstract class GridFilterAbstract
      *
      * @return mixed
      */
-    public static function getCondition(QueryBuilder $builder, string $name, $value, ?string $operator = NULL)
+    public static function getCondition(
+        QueryBuilder $builder,
+        string $name,
+        mixed $value,
+        ?string $operator = NULL
+    ): mixed
     {
         switch ($operator) {
             case self::EQ:
@@ -511,7 +510,7 @@ abstract class GridFilterAbstract
      *
      * @return mixed
      */
-    private static function getValue($value)
+    private static function getValue(mixed $value): mixed
     {
         if (is_numeric($value)) {
             return sprintf('%s', $value);
