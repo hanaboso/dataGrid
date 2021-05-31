@@ -188,7 +188,7 @@ abstract class GridFilterAbstract
         QueryBuilder $builder,
         string $name,
         mixed $value,
-        ?string $operator = NULL
+        ?string $operator = NULL,
     ): mixed
     {
         switch ($operator) {
@@ -208,29 +208,29 @@ abstract class GridFilterAbstract
                 return $builder->expr()->gte(
                     $name,
                     self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::GT:
                 return $builder->expr()->gt(
                     $name,
                     self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::LTE:
                 return $builder->expr()->lte(
                     $name,
                     self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::LT:
                 return $builder->expr()->lt(
                     $name,
                     self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::NEMPTY:
                 return $builder->expr()->isNotNull($name);
@@ -241,24 +241,24 @@ abstract class GridFilterAbstract
                     $name,
                     sprintf(
                         "'%%%s%%'",
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::STARTS:
                 return $builder->expr()->like(
                     $name,
                     sprintf(
                         "'%s%%'",
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::ENDS:
                 return $builder->expr()->like(
                     $name,
                     sprintf(
                         "'%%%s'",
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
             case self::BETWEEN:
                 if (is_array($value) && count($value) >= 2) {
@@ -271,7 +271,7 @@ abstract class GridFilterAbstract
                     return $builder->expr()
                         ->orX(
                             $builder->expr()->lte($name, self::getValue($value[0])),
-                            $builder->expr()->gte($name, self::getValue($value[1]))
+                            $builder->expr()->gte($name, self::getValue($value[1])),
                         );
                 }
 
@@ -280,8 +280,8 @@ abstract class GridFilterAbstract
                 return $builder->expr()->eq(
                     $name,
                     self::getValue(
-                        is_array($value) ? $value[0] : $value
-                    )
+                        is_array($value) ? $value[0] : $value,
+                    ),
                 );
         }
     }
@@ -341,9 +341,9 @@ abstract class GridFilterAbstract
                         sprintf(
                             "Column '%s' cannot be used for sorting! Have you forgotten add it to '%s::orderCols'?",
                             $column,
-                            static::class
+                            static::class,
                         ),
-                        GridException::SORT_COLS_ERROR
+                        GridException::SORT_COLS_ERROR,
                     );
                 }
 
@@ -378,8 +378,8 @@ abstract class GridFilterAbstract
                             "Filter must have '%s', '%s' and '%s' field!",
                             self::COLUMN,
                             self::OPERATOR,
-                            self::VALUE
-                        )
+                            self::VALUE,
+                        ),
                     );
                 }
 
@@ -409,8 +409,8 @@ abstract class GridFilterAbstract
                         $builder,
                         $this->filterCols[$column],
                         $orCondition[self::VALUE],
-                        $orCondition[self::OPERATOR]
-                    )
+                        $orCondition[self::OPERATOR],
+                    ),
                 );
             }
 
@@ -432,9 +432,9 @@ abstract class GridFilterAbstract
                 throw new GridException(
                     sprintf(
                         "Column cannot be used for searching! Have you forgotten add it to '%s::searchableCols'?",
-                        static::class
+                        static::class,
                     ),
-                    GridException::SEARCH_COLS_ERROR
+                    GridException::SEARCH_COLS_ERROR,
                 );
             }
 
@@ -444,9 +444,9 @@ abstract class GridFilterAbstract
                         sprintf(
                             "Column '%s' cannot be used for searching! Have you forgotten add it to '%s::filterCols'?",
                             $column,
-                            static::class
+                            static::class,
                         ),
-                        GridException::SEARCH_COLS_ERROR
+                        GridException::SEARCH_COLS_ERROR,
                     );
                 }
 
@@ -498,9 +498,9 @@ abstract class GridFilterAbstract
                 sprintf(
                     "Column '%s' cannot be used for filtering! Have you forgotten add it to '%s::filterCols'?",
                     $column,
-                    static::class
+                    static::class,
                 ),
-                GridException::FILTER_COLS_ERROR
+                GridException::FILTER_COLS_ERROR,
             );
         }
     }

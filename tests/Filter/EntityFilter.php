@@ -106,7 +106,7 @@ final class EntityFilter extends GridFilterAbstract
                 $value,
                 $name,
                 Composite $c,
-                ?string $operator
+                ?string $operator,
             ): void {
                 $c->add(GridFilterAbstract::getCondition($qb, $name, $value, $operator));
             },

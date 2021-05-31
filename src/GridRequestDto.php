@@ -84,8 +84,8 @@ class GridRequestDto implements GridRequestDtoInterface
                         sprintf(
                             '[%s, %s] filter fields are mandatory',
                             GridFilterAbstract::OPERATOR,
-                            GridFilterAbstract::COLUMN
-                        )
+                            GridFilterAbstract::COLUMN,
+                        ),
                     );
                 }
             }
@@ -171,8 +171,8 @@ class GridRequestDto implements GridRequestDtoInterface
                     sprintf(
                         'Each sorter must contain [%s, %s] keys',
                         GridFilterAbstract::COLUMN,
-                        GridFilterAbstract::DIRECTION
-                    )
+                        GridFilterAbstract::DIRECTION,
+                    ),
                 );
             }
 
@@ -182,8 +182,8 @@ class GridRequestDto implements GridRequestDtoInterface
                         'Invalid direction of sorter [%s], valid options: [%s, %s]',
                         $item[GridFilterAbstract::DIRECTION],
                         GridFilterAbstract::ASCENDING,
-                        GridFilterAbstract::DESCENDING
-                    )
+                        GridFilterAbstract::DESCENDING,
+                    ),
                 );
             }
         }

@@ -114,7 +114,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -132,9 +132,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -210,7 +210,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -222,9 +222,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -300,7 +300,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -312,9 +312,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -390,7 +390,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -402,9 +402,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -480,7 +480,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -492,9 +492,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -570,7 +570,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -582,9 +582,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -660,7 +660,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -672,9 +672,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -750,7 +750,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -762,9 +762,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -840,7 +840,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -852,9 +852,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -930,7 +930,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-8 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -942,9 +942,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1020,7 +1020,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('8 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1032,9 +1032,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'ASC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1110,7 +1110,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1122,9 +1122,9 @@ final class FilterTest extends TestCaseAbstract
                             'direction' => 'DESC',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1200,7 +1200,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         try {
@@ -1213,15 +1213,15 @@ final class FilterTest extends TestCaseAbstract
                                 'direction' => 'ASC',
                             ],
                         ],
-                    ]
-                )
+                    ],
+                ),
             );
             self::assertEquals(TRUE, FALSE);
         } catch (GridException $e) {
             self::assertEquals(GridException::SORT_COLS_ERROR, $e->getCode());
             self::assertEquals(
                 "Column 'Unknown' cannot be used for sorting! Have you forgotten add it to 'DataGridTests\Filter\EntityFilter::orderCols'?",
-                $e->getMessage()
+                $e->getMessage(),
             );
         }
     }
@@ -1243,9 +1243,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1258,7 +1258,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1273,9 +1273,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1288,7 +1288,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1303,9 +1303,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1318,7 +1318,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1340,9 +1340,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1355,7 +1355,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1370,9 +1370,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1385,7 +1385,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $dto    = new GridRequestDto(
@@ -1399,7 +1399,7 @@ final class FilterTest extends TestCaseAbstract
                         ],
                     ],
                 ],
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1413,7 +1413,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1424,7 +1424,7 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 1,
                 'sorter'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $dto    = new GridRequestDto(
@@ -1438,7 +1438,7 @@ final class FilterTest extends TestCaseAbstract
                         ],
                     ],
                 ],
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1466,7 +1466,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1477,7 +1477,7 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 3,
                 'sorter'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $dto    = new GridRequestDto(
@@ -1491,7 +1491,7 @@ final class FilterTest extends TestCaseAbstract
                         ],
                     ],
                 ],
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1505,7 +1505,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1516,13 +1516,13 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 1,
                 'sorter'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $dto    = new GridRequestDto(
             [
                 self::SEARCH => '9',
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1537,7 +1537,7 @@ final class FilterTest extends TestCaseAbstract
 
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1548,7 +1548,7 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 1,
                 'sorter'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1563,9 +1563,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1587,7 +1587,7 @@ final class FilterTest extends TestCaseAbstract
 
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1602,9 +1602,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1618,7 +1618,7 @@ final class FilterTest extends TestCaseAbstract
 
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1633,9 +1633,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1649,7 +1649,7 @@ final class FilterTest extends TestCaseAbstract
 
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1664,9 +1664,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1688,7 +1688,7 @@ final class FilterTest extends TestCaseAbstract
 
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1703,9 +1703,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1718,7 +1718,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('-1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1732,9 +1732,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals([], $result);
 
@@ -1749,9 +1749,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -1827,7 +1827,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -1841,7 +1841,7 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ))->setAdditionalFilters(
                 [
                     [
@@ -1850,16 +1850,16 @@ final class FilterTest extends TestCaseAbstract
                             'operator' => 'EMPTY',
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals([], $result);
 
         $dto    = new GridRequestDto(
             [
                 self::SEARCH => 'Unknown',
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals([], $result);
@@ -1872,7 +1872,7 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 0,
                 'sorter'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
     }
 
@@ -1889,7 +1889,7 @@ final class FilterTest extends TestCaseAbstract
                         'direction' => 'ASC',
                     ],
                 ], self::PAGING => [self::PAGE => '3', self::ITEMS_PER_PAGE => '2'],
-            ]
+            ],
         );
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1910,7 +1910,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1921,7 +1921,7 @@ final class FilterTest extends TestCaseAbstract
                 'total'        => 10,
                 'search'       => NULL,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $dto    = (new GridRequestDto(
@@ -1932,7 +1932,7 @@ final class FilterTest extends TestCaseAbstract
                         'direction' => 'ASC',
                     ],
                 ], self::PAGING => [self::PAGE => '3'],
-            ]
+            ],
         ))->setItemsPerPage(2);
         $result = (new EntityFilter($this->em))->getData($dto, ['date']);
         self::assertEquals(
@@ -1953,7 +1953,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -1964,7 +1964,7 @@ final class FilterTest extends TestCaseAbstract
                 'search'       => NULL,
                 'total'        => 10,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
 
         $document = (new EntityFilter($this->em));
@@ -1974,7 +1974,7 @@ final class FilterTest extends TestCaseAbstract
                 self::SORTER    => [
                     ['direction' => 'ASC', 'column' => 'id'],
                 ], self::PAGING => [self::PAGE => '3', self::ITEMS_PER_PAGE => '2'],
-            ]
+            ],
         );
         $result = $document->getData($dto, ['date']);
         self::assertEquals(
@@ -1995,7 +1995,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
         self::assertEquals(
             [
@@ -2006,7 +2006,7 @@ final class FilterTest extends TestCaseAbstract
                 'search'       => NULL,
                 'total'        => 10,
             ],
-            $dto->getParamsForHeader()
+            $dto->getParamsForHeader(),
         );
     }
 
@@ -2018,7 +2018,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::FILTER => [[['column' => 'a', 'operator' => 'b']]],
-            ]
+            ],
         );
 
         self::assertNotEmpty($dto->getFilter(FALSE));
@@ -2032,7 +2032,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::FILTER => ['a'],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2047,7 +2047,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::FILTER => [[[]]],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2062,7 +2062,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::SORTER => [['column' => 'a', 'direction' => 'b']],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2077,7 +2077,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::SORTER => ['a'],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2092,7 +2092,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::SORTER => [[[]]],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2107,7 +2107,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::FILTER => [[['column' => 'a', 'operator' => 'b']]],
-            ]
+            ],
         );
 
         self::expectException(LogicException::class);
@@ -2122,7 +2122,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::SEARCH => 'a',
-            ]
+            ],
         );
 
         $f = (new EntityFilter($this->em));
@@ -2141,7 +2141,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::SEARCH => 'a',
-            ]
+            ],
         );
 
         $f = (new EntityFilter($this->em));
@@ -2160,7 +2160,7 @@ final class FilterTest extends TestCaseAbstract
         $dto = new GridRequestDto(
             [
                 self::FILTER => [[['column' => 'a', 'operator' => 'b', 'value' => 'c']]],
-            ]
+            ],
         );
 
         self::expectException(GridException::class);
@@ -2185,9 +2185,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2200,7 +2200,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2221,9 +2221,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEmpty($result);
     }
@@ -2301,9 +2301,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2316,7 +2316,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2337,9 +2337,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2352,7 +2352,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2373,9 +2373,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2388,7 +2388,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2409,9 +2409,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2424,7 +2424,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -2439,9 +2439,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2462,7 +2462,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('+ 1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2539,9 +2539,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2554,7 +2554,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('+ 1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
 
         $result = (new EntityFilter($this->em))->getData(
@@ -2569,9 +2569,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2592,7 +2592,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('+ 9 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2620,9 +2620,9 @@ final class FilterTest extends TestCaseAbstract
                             ],
                         ],
                     ],
-                ]
+                ],
             ),
-            ['date']
+            ['date'],
         );
         self::assertEquals(
             [
@@ -2635,7 +2635,7 @@ final class FilterTest extends TestCaseAbstract
                     'date'   => $this->today->modify('1 day')->format(self::DATETIME),
                 ],
             ],
-            $result
+            $result,
         );
     }
 
@@ -2655,7 +2655,7 @@ final class FilterTest extends TestCaseAbstract
                     ->setInt($i)
                     ->setFloat((float) sprintf('%s.%s', $i, $i))
                     ->setBool($i % 2 === 0)
-                    ->setDate(new DateTime(sprintf('today +%s day', $i), new DateTimeZone('UTC')))
+                    ->setDate(new DateTime(sprintf('today +%s day', $i), new DateTimeZone('UTC'))),
             );
         }
 

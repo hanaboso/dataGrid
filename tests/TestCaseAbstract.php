@@ -47,7 +47,7 @@ abstract class TestCaseAbstract extends TestCase
             [sprintf('%s/Entity', __DIR__)],
             FALSE,
             sprintf(self::TEMP_DIR, __DIR__),
-            new FilesystemCache(sprintf(self::TEMP_DIR, __DIR__))
+            new FilesystemCache(sprintf(self::TEMP_DIR, __DIR__)),
         );
         $configuration->setMetadataDriverImpl($driver);
         $configuration->setProxyNamespace('Proxy');
@@ -63,7 +63,7 @@ abstract class TestCaseAbstract extends TestCase
                 'password' => getenv('MARIA_USER') ?: '',
                 'dbname'   => static::DATABASE,
             ],
-            $configuration
+            $configuration,
         );
 
         $schemaTool = new SchemaTool($this->em);

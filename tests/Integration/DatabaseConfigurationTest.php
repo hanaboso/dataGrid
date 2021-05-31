@@ -29,7 +29,7 @@ final class DatabaseConfigurationTest extends TestCaseAbstract
                 ->setInt(1)
                 ->setFloat(1.1)
                 ->setBool(TRUE)
-                ->setDate(new DateTime('today', new DateTimeZone('UTC')))
+                ->setDate(new DateTime('today', new DateTimeZone('UTC'))),
         );
         $this->em->flush();
         $this->em->clear();
