@@ -3,7 +3,6 @@
 namespace DataGridTests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
@@ -47,7 +46,6 @@ abstract class TestCaseAbstract extends TestCase
             [sprintf('%s/Entity', __DIR__)],
             FALSE,
             sprintf(self::TEMP_DIR, __DIR__),
-            new FilesystemCache(sprintf(self::TEMP_DIR, __DIR__)),
         );
         $configuration->setMetadataDriverImpl($driver);
         $configuration->setProxyNamespace('Proxy');

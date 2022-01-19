@@ -65,7 +65,7 @@ final class ResultData
      */
     private function getResult(int $hydrationMode = AbstractQuery::HYDRATE_OBJECT): array
     {
-        $this->query->setHydrationMode($hydrationMode);
+        $this->query->setHydrationMode((string) $hydrationMode);
         $paginated = new Paginator($this->query, $this->fetchJoinCollection);
         $paginated->setUseOutputWalkers(FALSE);
 
