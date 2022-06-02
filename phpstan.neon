@@ -7,7 +7,10 @@ parameters:
 			message: '#Type mixed in generic type Doctrine\\ORM\\EntityRepository\<mixed\> in#'
 			path:  src/GridFilterAbstract.php
 		-
-			message: '#Parameter \#1 \$classes of method #'
+			message: '#Parameter \#1 \$classes of method#'
+			path: tests/TestCaseAbstract.php
+		-
+			message: '#Parameter \#1 \$nestedDriver of method#'
 			path: tests/TestCaseAbstract.php
 	ergebnis:
 			classesAllowedToBeExtended:
