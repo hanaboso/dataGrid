@@ -51,7 +51,7 @@ class GridRequestDto implements GridRequestDtoInterface
      */
     public function __construct(array $headers)
     {
-        $this->headers = array_change_key_case($headers, CASE_LOWER);
+        $this->headers = array_change_key_case($headers);
     }
 
     /**

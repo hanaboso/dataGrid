@@ -27,7 +27,7 @@ final class ResultData
      *
      * @param Query $query
      */
-    public function __construct(private Query $query)
+    public function __construct(private readonly Query $query)
     {
     }
 
