@@ -23,17 +23,17 @@ trait GridHandlerTrait
         $lastPage = intval($dto->getTotal() / $dto->getItemsPerPage()) + 1;
 
         return [
-            'items'  => $items,
             'filter' => $dto->getFilter(FALSE),
-            'sorter' => $dto->getOrderBy(),
+            'items'  => $items,
             'paging' => [
-                'page'         => $page,
                 'itemsPerPage' => $dto->getItemsPerPage(),
-                'total'        => $total,
-                'nextPage'     => min($lastPage, $page + 1),
                 'lastPage'     => $lastPage,
+                'nextPage'     => min($lastPage, $page + 1),
+                'page'         => $page,
                 'previousPage' => max(1, $page - 1),
+                'total'        => $total,
             ],
+            'sorter' => $dto->getOrderBy(),
         ];
     }
 

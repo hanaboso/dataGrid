@@ -80,7 +80,7 @@ class Entity
      *
      * @return Entity
      */
-    public function setString(string $string): Entity
+    public function setString(string $string): self
     {
         $this->string = $string;
 
@@ -100,7 +100,7 @@ class Entity
      *
      * @return Entity
      */
-    public function setInt(int $int): Entity
+    public function setInt(int $int): self
     {
         $this->int = $int;
 
@@ -120,7 +120,7 @@ class Entity
      *
      * @return Entity
      */
-    public function setFloat(float $float): Entity
+    public function setFloat(float $float): self
     {
         $this->float = $float;
 
@@ -140,7 +140,7 @@ class Entity
      *
      * @return Entity
      */
-    public function setBool(bool $bool): Entity
+    public function setBool(bool $bool): self
     {
         $this->bool = $bool;
 
@@ -160,7 +160,7 @@ class Entity
      *
      * @return Entity
      */
-    public function setDate(DateTime $date): Entity
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 

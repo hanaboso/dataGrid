@@ -21,13 +21,13 @@ final class EntityFilter extends GridFilterAbstract
     protected function filterCols(): array
     {
         return [
-            'id'            => 'e.id',
-            'string'        => 'e.string',
-            'int'           => 'e.int',
-            'float'         => 'e.float',
             'bool'          => 'e.bool',
-            'date'          => 'e.date',
             'custom_string' => 'e.string',
+            'date'          => 'e.date',
+            'float'         => 'e.float',
+            'id'            => 'e.id',
+            'int'           => 'e.int',
+            'string'        => 'e.string',
         ];
     }
 
@@ -37,12 +37,12 @@ final class EntityFilter extends GridFilterAbstract
     protected function orderCols(): array
     {
         return [
-            'id'     => 'e.id',
-            'string' => 'e.string',
-            'int'    => 'e.int',
-            'float'  => 'e.float',
             'bool'   => 'e.bool',
             'date'   => 'e.date',
+            'float'  => 'e.float',
+            'id'     => 'e.id',
+            'int'    => 'e.int',
+            'string' => 'e.string',
         ];
     }
 

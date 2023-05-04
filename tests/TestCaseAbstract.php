@@ -55,11 +55,11 @@ abstract class TestCaseAbstract extends TestCase
 
         $this->em = EntityManager::create(
             [
+                'dbname'   => static::DATABASE,
                 'driver'   => 'pdo_mysql',
                 'host'     => getenv('MARIA_HOST') ?: '127.0.0.1',
-                'user'     => getenv('MARIA_USER') ?: 'travis',
                 'password' => getenv('MARIA_USER') ?: '',
-                'dbname'   => static::DATABASE,
+                'user'     => getenv('MARIA_USER') ?: 'travis',
             ],
             $configuration,
         );

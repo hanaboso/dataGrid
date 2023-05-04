@@ -50,6 +50,9 @@ database-create:
 phpcodesniffer:
 	$(DE) ./vendor/bin/phpcs --parallel=$$(nproc) --standard=./ruleset.xml src tests
 
+phpcodesnifferfix:
+	$(DE) vendor/bin/phpcbf --parallel=$$(nproc) --standard=./ruleset.xml src tests
+
 phpstan:
 	$(DE) ./vendor/bin/phpstan analyse -c ./phpstan.neon -l 8 src tests
 

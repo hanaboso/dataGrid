@@ -42,7 +42,7 @@ interface GridRequestDtoInterface
      *
      * @return GridRequestDtoInterface
      */
-    public function setTotal(int $total): GridRequestDtoInterface;
+    public function setTotal(int $total): self;
 
     /**
      * @return int
