@@ -60,7 +60,7 @@ phpintegration: database-create
 	$(DE) ./vendor/bin/phpunit  -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist tests/Integration
 
 phpcoverage:
-	$(DE) ./vendor/bin/paratest -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist -p $$(nproc) --coverage-html var/coverage --whitelist src tests
+	$(DE) ./vendor/bin/paratest -c ./vendor/hanaboso/php-check-utils/phpunit.xml.dist -p $$(nproc) --coverage-html var/coverage --coverage-filter src tests
 
 phpcoverage-ci:
 	$(DE) ./vendor/hanaboso/php-check-utils/bin/coverage.sh
