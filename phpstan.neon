@@ -12,6 +12,9 @@ parameters:
 		-
 			message: '#Parameter \#1 \$nestedDriver of method#'
 			path: tests/TestCaseAbstract.php
+		-
+			message: '#Method .* never returns null so it can be removed from the return type#'
+			path:  tests/Filter/EntityFilter.php
 	ergebnis:
 			classesAllowedToBeExtended:
 				- DataGridTests\TestCaseAbstract

@@ -2,7 +2,7 @@
     "name": "hanaboso/data-grid",
     "description": "Data grid",
     "license": "Apache-2.0",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "require": {
         "php": "^8.2",
         "ext-ctype": "*",
@@ -10,7 +10,7 @@
         "ext-mbstring": "*",
         "beberlei/doctrineextensions": "^1.3",
         "doctrine/annotations": "^1.14",
-        "doctrine/orm": "^2.15",
+        "doctrine/orm": "^2.17",
         "hanaboso/utils": "^1.4"
     },
     "require-dev": {

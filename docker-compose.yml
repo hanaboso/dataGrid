@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
     php:
-        image: hanabosocom/php-dev:php-8.2-alpine
+        image: hanabosocom/php-dev:php-8.3-alpine
         user: ${DEV_UID}:${DEV_GID}
         environment:
             DEV_UID: ${DEV_UID}
@@ -13,7 +13,6 @@ services:
             MARIA_PASSWORD: 'root'
         volumes:
             - ./:/var/www:cached
-            - ${SSH_AUTH}:/tmp/.ssh-auth-sock
             - ${HOME}/dev/.composer:${HOME}/dev/.composer:cached
 
     mariadb:
