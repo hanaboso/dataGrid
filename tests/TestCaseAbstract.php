@@ -12,6 +12,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use Exception;
 use Hanaboso\PhpCheckUtils\PhpUnit\Traits\PrivateTrait;
+use Hanaboso\PhpCheckUtils\PhpUnit\Traits\RestoreErrorHandlersTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,6 +24,7 @@ abstract class TestCaseAbstract extends TestCase
 {
 
     use PrivateTrait;
+    use RestoreErrorHandlersTrait;
 
     protected const DATABASE = 'datagrid';
 
@@ -67,6 +69,16 @@ abstract class TestCaseAbstract extends TestCase
         $schemaTool = new SchemaTool($this->em);
         $schemaTool->dropSchema($this->em->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema($this->em->getMetadataFactory()->getAllMetadata());
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void {
+        parent::tearDown();
+
+        $this->restoreErrorHandler();
+        $this->restoreExceptionHandler();
     }
 
 }

@@ -64,9 +64,7 @@ final class EntityFilter extends GridFilterAbstract
      */
     protected function useFetchJoin(): bool
     {
-        parent::useFetchJoin();
-
-        return TRUE;
+        return parent::useFetchJoin();
     }
 
     /**
@@ -85,8 +83,6 @@ final class EntityFilter extends GridFilterAbstract
      */
     protected function configCustomCountQuery(): ?QueryBuilder
     {
-        parent::configCustomCountQuery();
-
         return $this
             ->getRepository()
             ->createQueryBuilder('e')
@@ -98,8 +94,6 @@ final class EntityFilter extends GridFilterAbstract
      */
     protected function configFilterColsCallbacks(): array
     {
-        parent::configFilterColsCallbacks();
-
         return [
             'custom_string' => static function (
                 QueryBuilder $qb,
